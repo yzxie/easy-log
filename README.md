@@ -1,2 +1,3 @@
 # easy-log
-distributed log analyzer
+Distributed log analyzer
+
