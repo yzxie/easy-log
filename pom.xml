@@ -10,10 +10,11 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>log-starter</module>
-        <module>log-fetcher</module>
+        <module>log-collector</module>
         <module>log-storage</module>
         <module>log-engine</module>
         <module>log-common</module>
+        <module>log-conf</module>
     </modules>
 
 
