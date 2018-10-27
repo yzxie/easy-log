@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>log-web</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Log web</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

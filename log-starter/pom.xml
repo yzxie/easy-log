@@ -11,5 +11,19 @@
 
     <artifactId>log-starter</artifactId>
 
-
+    <dependencies>
+        <!-- 子模块依赖 -->
+        <dependency>
+            <groupId>com.yzxie</groupId>
+            <artifactId>log-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.yzxie</groupId>
+            <artifactId>log-conf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.yzxie</groupId>
+            <artifactId>log-collector</artifactId>
+        </dependency>
+    </dependencies>
 </project>
