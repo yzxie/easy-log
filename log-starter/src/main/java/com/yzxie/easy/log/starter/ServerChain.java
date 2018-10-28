@@ -13,13 +13,13 @@ public final class ServerChain {
      */
     private final AbstractServer boot = new AbstractServer() {
         @Override
-        protected void start() {
+        public void start() {
             startNext();
             //todo log server chain start.
         }
 
         @Override
-        protected void stop() {
+        public void stop() {
             stopNext();
         }
     };

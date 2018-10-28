@@ -2,8 +2,9 @@ package com.yzxie.easy.log.collector.kafka;
 
 /**
  * @author xieyizun
- * @date 26/10/2018 17:36
+ * @date 28/10/2018 14:10
  * @description:
  */
-public class MessageTopic {
+public enum ConsumerStatus {
+    EMPTY, NOT_EMPTY, READ_EXCEPTION
 }

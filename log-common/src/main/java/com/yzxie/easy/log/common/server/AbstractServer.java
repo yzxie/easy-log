@@ -14,9 +14,9 @@ public abstract class AbstractServer {
     /**
      * override by specific server to custom start/stop process.
      */
-    protected abstract void start();
+    public abstract void start();
 
-    protected abstract void stop();
+    public abstract void stop();
 
     public void startNext() {
         if (next != null) {
