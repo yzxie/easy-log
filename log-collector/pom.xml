@@ -21,6 +21,10 @@
             <groupId>com.yzxie</groupId>
             <artifactId>log-conf</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.yzxie</groupId>
+            <artifactId>log-engine</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.kafka</groupId>

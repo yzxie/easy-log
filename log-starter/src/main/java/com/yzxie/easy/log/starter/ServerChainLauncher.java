@@ -1,7 +1,7 @@
 package com.yzxie.easy.log.starter;
 
 import com.yzxie.easy.log.collector.LogCollectorServer;
-import com.yzxie.easy.log.common.server.AbstractServer;
+import com.yzxie.easy.log.engine.LogEngineServer;
 
 /**
  * @author xieyizun
@@ -13,7 +13,8 @@ public final class ServerChainLauncher {
 
     public void init() {
         serverChain.init()
-                    .setNextServer(new LogCollectorServer());
+                    .setNextServer(new LogCollectorServer())
+                    .setNextServer(new LogEngineServer());
     }
 
     public void start() {

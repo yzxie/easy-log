@@ -5,7 +5,7 @@ import kafka.consumer.ConsumerConfig;
 import kafka.javaapi.consumer.ConsumerConnector;
 import java.util.Properties;
 
-import static org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.*;
 
 /**
  * @author xieyizun
@@ -33,14 +33,14 @@ public class MessageConsumerFactory {
 
     private static ConsumerConfig intConsumerConfig(String groupId) {
         Properties props = new Properties();
-        props.put("group.id", groupId);
-        props.put("zookeeper.connect", "127.0.0.1:2181");
+        props.put(GROUP_ID_CONFIG, groupId);
+        props.put(AUTO_COMMIT_INTERVAL_MS_CONFIG, "5000");
+        props.put(AUTO_OFFSET_RESET_CONFIG, "smallest");
 
+        props.put("zookeeper.connect", "127.0.0.1:2181");
         props.put("zookeeper.connection.timeout.ms", "3000");
         props.put("zookeeper.session.timeout.ms", "30000");
         props.put("zookeeper.sync.time.ms", "5000");
-        props.put("auto.commit.interval.ms", "5000");
-        props.put("auto.offset.reset", "smallest");
         props.put("dual.commit.enabled", "true");
         props.put("serializer.class", "kafka.serializer.StringEncoder");
 

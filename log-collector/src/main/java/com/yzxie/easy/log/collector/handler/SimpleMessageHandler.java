@@ -3,6 +3,7 @@ package com.yzxie.easy.log.collector.handler;
 import com.yzxie.easy.log.collector.kafka.KafkaMessage;
 import com.yzxie.easy.log.collector.kafka.MessageConsumer;
 import com.yzxie.easy.log.collector.kafka.MessageConsumerFactory;
+import com.yzxie.easy.log.engine.LogEngineServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,9 +26,13 @@ public class SimpleMessageHandler implements Runnable {
         while(true) {
             if (messageConsumer.hasNext()) {
                 KafkaMessage kafkaMessage = messageConsumer.next();
-                //todo send to storm
                 LOG.info("SimpleMessageHandler receive from {} : {}", messageConsumer.getTopicName(),
                         kafkaMessage.getContent());
+                /**
+                 * dispatch to engine to analyze,
+                 * so as to release collector thread's load
+                 */
+                LogEngineServer.dispatch(kafkaMessage.getTopic(), kafkaMessage.getContent());
             }
         }
     }

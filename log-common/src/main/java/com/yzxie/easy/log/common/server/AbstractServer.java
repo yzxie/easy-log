@@ -36,7 +36,7 @@ public abstract class AbstractServer {
         } else {
             this.next = next;
         }
-        return this.next;
+        return next;
     }
 
     public String getName() {
