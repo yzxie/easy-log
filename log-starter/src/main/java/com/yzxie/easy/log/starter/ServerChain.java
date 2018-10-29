@@ -1,6 +1,6 @@
 package com.yzxie.easy.log.starter;
 
-import com.yzxie.easy.log.common.server.AbstractServer;
+import com.yzxie.easy.log.common.service.AbstractService;
 
 /**
  * @author xieyizun
@@ -9,13 +9,13 @@ import com.yzxie.easy.log.common.server.AbstractServer;
  */
 public final class ServerChain {
     /**
-     * the last server in this chain
+     * the last service in this chain
      */
-    private final AbstractServer boot = new AbstractServer() {
+    private final AbstractService boot = new AbstractService() {
         @Override
         public void start() {
             startNext();
-            //todo log server chain start.
+            //todo log service chain start.
         }
 
         @Override
@@ -24,9 +24,9 @@ public final class ServerChain {
         }
     };
 
-    private AbstractServer last = boot;
+    private AbstractService last = boot;
 
-    public ServerChain setNextServer(AbstractServer nextServer) {
+    public ServerChain setNextServer(AbstractService nextServer) {
         this.last = last.setNext(nextServer);
         return this;
     }

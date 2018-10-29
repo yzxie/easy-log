@@ -45,4 +45,6 @@
         <appender-ref ref="FILE" />
         <appender-ref ref="ERROR" />
     </root>
+    <logger name="org.apache.zookeeper" level="WARN" />
+    <logger name="kafka.utils.VerifiableProperties" level="WARN" />
 </configuration>

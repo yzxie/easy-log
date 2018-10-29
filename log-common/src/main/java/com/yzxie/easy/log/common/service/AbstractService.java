@@ -1,4 +1,4 @@
-package com.yzxie.easy.log.common.server;
+package com.yzxie.easy.log.common.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,11 +8,13 @@ import org.slf4j.LoggerFactory;
  * @date 27/10/2018 22:58
  * @description:
  */
-public abstract class AbstractServer {
-    protected AbstractServer next;
+public abstract class AbstractService {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractService.class);
+
+    protected AbstractService next;
 
     /**
-     * override by specific server to custom start/stop process.
+     * override by specific service to custom start/stop process.
      */
     public abstract void start();
 
@@ -30,9 +32,9 @@ public abstract class AbstractServer {
         }
     }
 
-    public AbstractServer setNext(AbstractServer next) {
+    public AbstractService setNext(AbstractService next) {
         if (this.next != null) {
-            //TODO log already exits
+            LOG.warn("setNext next is already existed.");
         } else {
             this.next = next;
         }

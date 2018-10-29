@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -18,12 +16,11 @@ public abstract class AbstractEngineHandler implements IEngineHandler {
 
     private String topicName;
     private BlockingQueue<String> messagesList = new LinkedBlockingQueue<>();
-    private ExecutorService singleThread = Executors.newSingleThreadExecutor();
     private MessageProcessor messageProcessor = new MessageProcessor();
 
     public AbstractEngineHandler(String topicName) {
         this.topicName = topicName;
-        singleThread.execute(messageProcessor);
+        messageProcessor.start();
     }
 
     public void handle(String content) {
@@ -36,22 +33,26 @@ public abstract class AbstractEngineHandler implements IEngineHandler {
     }
 
     /**
-     * implement by child class to specific analyze
+     * implement by child class to specific analyze process
      * @param content
      */
     protected abstract void process(String content);
 
-    private class MessageProcessor implements Runnable {
+    /**
+     * each engine handler is bound to a thread.
+     */
+    private class MessageProcessor extends Thread {
         @Override
         public void run() {
-            // todo isInterrupt
-            while (true) {
+            String content;
+            while (!isInterrupted()) {
                 try {
-                    String content = messagesList.take();
-                    LOG.info("engine handler analyze {} : {}", topicName, content);
-                    process(content);
+                    if ((content = messagesList.take()) != null) {
+                        LOG.info("engine handler analyze {} : {}", topicName, content);
+                        process(content);
+                    }
                 } catch (Exception e) {
-
+                    LOG.error("MessageProcessor exception {}", e);
                 }
             }
         }

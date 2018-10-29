@@ -19,6 +19,7 @@
 
     <properties>
         <kafka.version>0.8.2.2</kafka.version>
+        <log4j-over-slf4j.version>1.7.7</log4j-over-slf4j.version>
         <slf4j-api.version>1.7.25</slf4j-api.version>
         <logback-classic.version>1.2.3</logback-classic.version>
         <guava.version>18.0</guava.version>
@@ -87,6 +88,12 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback-classic.version}</version>
+        </dependency>
+        <!-- 将旧的log4j适配到slf4j，再统一使用logback日志打印 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>${log4j-over-slf4j.version}</version>
         </dependency>
 
         <dependency>

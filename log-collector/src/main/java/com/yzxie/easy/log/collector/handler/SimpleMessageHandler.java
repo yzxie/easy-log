@@ -3,7 +3,7 @@ package com.yzxie.easy.log.collector.handler;
 import com.yzxie.easy.log.collector.kafka.KafkaMessage;
 import com.yzxie.easy.log.collector.kafka.MessageConsumer;
 import com.yzxie.easy.log.collector.kafka.MessageConsumerFactory;
-import com.yzxie.easy.log.engine.LogEngineServer;
+import com.yzxie.easy.log.engine.LogEngineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +32,7 @@ public class SimpleMessageHandler implements Runnable {
                  * dispatch to engine to analyze,
                  * so as to release collector thread's load
                  */
-                LogEngineServer.dispatch(kafkaMessage.getTopic(), kafkaMessage.getContent());
+                LogEngineService.dispatch(kafkaMessage.getTopic(), kafkaMessage.getContent());
             }
         }
     }
