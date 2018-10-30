@@ -11,5 +11,11 @@
 
     <artifactId>log-common</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.yzxie</groupId>
+            <artifactId>log-conf</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

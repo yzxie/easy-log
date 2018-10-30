@@ -23,6 +23,8 @@
         <slf4j-api.version>1.7.25</slf4j-api.version>
         <logback-classic.version>1.2.3</logback-classic.version>
         <guava.version>18.0</guava.version>
+        <commons-collections4.version>4.1</commons-collections4.version>
+
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -101,34 +103,50 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${commons-collections4.version}</version>
+        </dependency>
     </dependencies>
 
     <profiles>
         <profile>
             <id>dev</id>
             <properties>
-                <conf-dir>dev</conf-dir>
+                <profiles.active>dev</profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <profiles.active>test</profiles.active>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
         <profile>
-            <id>test</id>
-            <properties>
-                <conf-dir>test</conf-dir>
-            </properties>
-        </profile>
-        <profile>
             <id>release</id>
             <properties>
-                <conf-dir>release</conf-dir>
+                <profiles.active>release</profiles.active>
             </properties>
         </profile>
     </profiles>
 
     <build>
+        <resources>
+            <!-- 指定资源位置，与profile.activation.activeDefault结合使用 -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>profiles/**</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources/profiles/${profiles.active}</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

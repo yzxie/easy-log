@@ -6,4 +6,13 @@ package com.yzxie.easy.log.conf.xml;
  * @description:
  */
 public class TopicConfig extends XmlConfig {
+
+    public static final String TOPIC_LIST = "topicList.topic";
+    public static final String TOPIC_NAME = "name";
+
+    public TopicConfig() {
+        super("topic_config.xml");
+    }
+
+
 }
