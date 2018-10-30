@@ -15,13 +15,13 @@ import java.util.List;
  */
 public final class TopicContainer {
     private static final Logger LOG = LoggerFactory.getLogger(TopicContainer.class);
+
     private static List<String> topicsList = new ArrayList<>();
 
     static {
         TopicConfig topicConfig = new TopicConfig();
         List<HierarchicalConfiguration> topicList = topicConfig.getList(TopicConfig.TOPIC_LIST);
         for (HierarchicalConfiguration topic : topicList) {
-            LOG.info("===={}", topic.getString("name"));
             topicsList.add(topic.getString(TopicConfig.TOPIC_NAME));
         }
     }
