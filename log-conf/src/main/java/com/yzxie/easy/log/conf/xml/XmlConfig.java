@@ -40,6 +40,13 @@ public class XmlConfig {
         return null;
     }
 
+    public boolean getBoolean(String key) {
+        if (xmlConfiguration != null) {
+            return xmlConfiguration.getBoolean(key);
+        }
+        return false;
+    }
+
     public List<HierarchicalConfiguration> getList(String key) {
         if (xmlConfiguration != null) {
             return xmlConfiguration.configurationsAt(key);

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
  * @description:
  */
 public class MainServer {
-    private static final Logger logger = LoggerFactory.getLogger(MainServer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MainServer.class);
 
     public static void main(String[] args) {
         ServerChainLauncher launcher = new ServerChainLauncher();
@@ -19,6 +19,12 @@ public class MainServer {
     }
 
     public static void addShutdownHook(ServerChainLauncher launcher) {
-
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //TODO
+                LOG.info("MainServer shutdown successfully.");
+            }
+        }));
     }
 }

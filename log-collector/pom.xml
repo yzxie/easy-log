@@ -11,6 +11,10 @@
 
     <artifactId>log-collector</artifactId>
 
+    <properties>
+        <kafka.version>0.8.2.2</kafka.version>
+    </properties>
+
     <dependencies>
         <!-- 子模块依赖 -->
         <dependency>
@@ -26,9 +30,12 @@
             <artifactId>log-engine</artifactId>
         </dependency>
 
+        <!-- kakfa依赖 -->
+        <!-- 注意版本需与在跑的kafka实例是同一个版本，否则会导致接收不了数据 -->
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka_2.10</artifactId>
+            <version>${kafka.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -40,6 +47,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>${kafka.version}</version>
+        </dependency>
     </dependencies>
 </project>

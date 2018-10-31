@@ -16,5 +16,13 @@
             <groupId>com.yzxie</groupId>
             <artifactId>log-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.yzxie</groupId>
+            <artifactId>log-conf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.yzxie</groupId>
+            <artifactId>log-storage</artifactId>
+        </dependency>
     </dependencies>
 </project>

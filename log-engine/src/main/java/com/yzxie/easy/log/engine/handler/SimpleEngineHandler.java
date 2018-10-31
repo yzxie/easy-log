@@ -1,5 +1,6 @@
 package com.yzxie.easy.log.engine.handler;
 
+import com.yzxie.easy.log.storage.LogStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,11 @@ public class SimpleEngineHandler extends AbstractEngineHandler {
      */
     @Override
     public void process(String content) {
+
+        /**
+         * 将处理结果存储到Redis
+         */
+        LogStorageService.dispatch(getTopicName(), content);
         LOG.info("simple analyze: {} successfully.", content);
     }
 }

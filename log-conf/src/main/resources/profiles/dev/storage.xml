@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+    <storage>
+        <redis>
+            <host>127.0.0.1</host>
+            <port>6379</port>
+            <password></password>
+            <maxIdle>300</maxIdle>
+            <maxTotal>600</maxTotal>
+            <maxWait>3000</maxWait>
+            <testOnBorrow>true</testOnBorrow>
+        </redis>
+        <mysql>
+            <host>127.0.0.1</host>
+            <username>root</username>
+            <password>root</password>
+            <db>easy_log</db>
+        </mysql>
+    </storage>
+</config>
