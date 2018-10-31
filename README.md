@@ -1,5 +1,5 @@
-# easy-log
-分布式日志分析系统
+# 分布式日志分析系统
+
 一. 多模块结构
 1. log-collector：日志收集模块，作为消费者，实时从kafka读取Flume传输到kafka上面的日志数据
 2. log-engine：日志分析引擎，对从log-collector获取的数据，进行处理，根据配置文件定义的日志数据格式，进行处理分析；
