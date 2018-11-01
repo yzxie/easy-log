@@ -29,5 +29,6 @@ public class LogStorageService extends AbstractService {
 
     public static void dispatch(String topicName, String content) {
         RedisHandler.rightPushList(topicName, content);
+        RedisHandler.increaseScore(topicName, content);
     }
 }

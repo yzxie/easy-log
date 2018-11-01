@@ -2,15 +2,12 @@ package com.yzxie.easy.log.storage.handler;
 
 import com.yzxie.easy.log.conf.xml.StorageConfig;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.BoundHashOperations;
-import org.springframework.data.redis.core.BoundListOperations;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author xieyizun
@@ -106,5 +103,38 @@ public class RedisHandler {
         redisTemplate.boundListOps(key).rightPush(value);
     }
 
+    /**
+     * zset相关操作
+     */
+    public static void addZSet(String key, String value, double score) {
+        BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
+        operations.add(value, score);
+    }
+
+    public static List<Map<String, Object>> getTop10WithScore(String key) {
+        List<Map<String, Object>> zSetValues = new ArrayList<>();
+        BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
+        Set<ZSetOperations.TypedTuple<String>> valuesWithScore = operations.rangeWithScores(0, 10);
+
+        for (ZSetOperations.TypedTuple<String> value : valuesWithScore) {
+            Map<String, Object> valueScoreMap = new HashMap<>();
+            valueScoreMap.put("value", value.getValue());
+            valueScoreMap.put("score", value.getScore());
+            zSetValues.add(valueScoreMap);
+        }
+        return zSetValues;
+    }
+
+    public static double getScore(String key, String value) {
+        return redisTemplate.boundZSetOps(key).score(value);
+    }
+
+    public static void increaseScore(String key, String value, double score) {
+        redisTemplate.boundZSetOps(key).incrementScore(value, score);
+    }
+
+    public static void increaseScore(String key, String value) {
+        increaseScore(key, value, 1.0);
+    }
 
 }
