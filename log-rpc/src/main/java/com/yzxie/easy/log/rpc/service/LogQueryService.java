@@ -27,7 +27,7 @@ public class LogQueryService implements LogQueryServiceApi {
             apiRank.setRequestCount(NumberUtils.toLong(apiRequestCount.get("score").toString()));
             apiRanks.add(apiRank);
         }
-
-        return apiRanks;
+        // 消息不能太大，否则dubbo报错：Dubbo client can not supported string message
+        return apiRanks.subList(0, 10);
     }
 }

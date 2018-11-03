@@ -25,5 +25,9 @@
             <groupId>com.yzxie</groupId>
             <artifactId>log-collector</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.yzxie</groupId>
+            <artifactId>log-rpc</artifactId>
+        </dependency>
     </dependencies>
 </project>

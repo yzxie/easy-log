@@ -2,6 +2,7 @@ package com.yzxie.easy.log.starter;
 
 import com.yzxie.easy.log.collector.LogCollectorService;
 import com.yzxie.easy.log.engine.LogEngineService;
+import com.yzxie.easy.log.rpc.LogRpcService;
 import com.yzxie.easy.log.storage.LogStorageService;
 
 /**
@@ -16,7 +17,8 @@ public final class ServerChainLauncher {
         serverChain.init()
                     .setNextServer(new LogCollectorService())
                     .setNextServer(new LogEngineService())
-                    .setNextServer(new LogStorageService());
+                    .setNextServer(new LogStorageService())
+                    .setNextServer(new LogRpcService());
     }
 
     public void start() {

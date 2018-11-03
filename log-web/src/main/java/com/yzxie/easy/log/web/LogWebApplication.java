@@ -2,6 +2,7 @@ package com.yzxie.easy.log.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ImportResource;
 
 /**
  * @author xieyizun
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 
 @SpringBootApplication
+@ImportResource(locations= {"classpath:dubbo_consumer.xml"})
 public class LogWebApplication {
 
     public static void main(String[] args) {

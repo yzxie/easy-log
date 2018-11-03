@@ -1,5 +1,6 @@
 package com.yzxie.easy.log.web.controller;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.yzxie.easy.log.common.api.LogQueryServiceApi;
 import com.yzxie.easy.log.common.data.ApiRank;
 import com.yzxie.easy.log.web.data.ResData;
@@ -20,11 +21,11 @@ import java.util.List;
 public class IndexController {
 
     @Autowired
-    private LogQueryServiceApi logQueryServiceApi;
+    private LogQueryServiceApi logStorageService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResData index() {
-        List<ApiRank> apiRanks = logQueryServiceApi.getRankingOfApiCall("runoobkey");
+        List<ApiRank> apiRanks = logStorageService.getRankingOfApiCall("runoobkey");
         return new ResData(apiRanks);
     }
 }
