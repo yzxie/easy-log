@@ -1,6 +1,5 @@
 package com.yzxie.easy.log.web.controller;
 
-import com.yzxie.easy.log.common.api.LogQueryServiceApi;
 import com.yzxie.easy.log.common.data.ApiRank;
 import com.yzxie.easy.log.web.data.ResData;
 import com.yzxie.easy.log.web.service.IndexService;

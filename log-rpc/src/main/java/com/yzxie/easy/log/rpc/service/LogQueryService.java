@@ -28,6 +28,6 @@ public class LogQueryService implements LogQueryServiceApi {
             apiRanks.add(apiRank);
         }
         // 消息不能太大，否则dubbo报错：Dubbo client can not supported string message
-        return apiRanks.subList(0, 10);
+        return apiRanks.size() > 10 ? apiRanks.subList(0, 10) : apiRanks;
     }
 }
