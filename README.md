@@ -7,16 +7,14 @@
 4. log-conf：配置文件管理模块
 5. log-common：公共类，公共组件，工具类定义模块
 6. log-starter：整个服务启动模块
-7. log-web：web项目，对日志分析结果实时可视化展示
 
 二. 技术栈
-1. SpringBoot
-2. Dubbo
-3. Mybatis
-4. Flume
-5. Kafka
-6. Netty
-7. Redis
-8. MySQL
+1. Dubbo
+2. Mybatis
+3. Flume
+4. Kafka
+5. Netty
+6. Redis
+7. MySQL
 
 
