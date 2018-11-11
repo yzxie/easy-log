@@ -1,10 +1,10 @@
 package com.yzxie.easy.log.engine.handler;
 
+import com.yzxie.easy.log.engine.netty.NettyClient;
+import com.yzxie.easy.log.engine.netty.NettyConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.*;
 
 /**
  * @author xieyizun
@@ -17,10 +17,15 @@ public abstract class AbstractEngineHandler implements IEngineHandler {
     private String topicName;
     private BlockingQueue<String> messagesList = new LinkedBlockingQueue<>();
     private MessageProcessor messageProcessor = new MessageProcessor();
+    // 每个处理器使用一个nettyClient发送消息给easy web
+    private NettyClient nettyClient = new NettyClient(NettyConstants.SERVER_HOST, NettyConstants.SERVER_PORT);
 
     public AbstractEngineHandler(String topicName) {
         this.topicName = topicName;
         messageProcessor.start();
+        // 异步启动netty与服务端的连接，避免服务器还没启动
+        ScheduledExecutorService asyncStartUpService = Executors.newSingleThreadScheduledExecutor();
+        asyncStartUpService.schedule(new NettyClient.AsyncStartUpTask(nettyClient), 30000, TimeUnit.MILLISECONDS);
     }
 
     public void handle(String content) {
@@ -30,6 +35,10 @@ public abstract class AbstractEngineHandler implements IEngineHandler {
 
     public String getTopicName() {
         return topicName;
+    }
+
+    public NettyClient getNettyClient() {
+        return this.nettyClient;
     }
 
     /**

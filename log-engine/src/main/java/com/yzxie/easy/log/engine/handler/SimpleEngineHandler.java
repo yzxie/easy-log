@@ -1,5 +1,6 @@
 package com.yzxie.easy.log.engine.handler;
 
+import com.alibaba.fastjson.JSONObject;
 import com.yzxie.easy.log.storage.LogStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,5 +29,12 @@ public class SimpleEngineHandler extends AbstractEngineHandler {
          */
         LogStorageService.dispatch(getTopicName(), content);
         LOG.info("simple analyze: {} successfully.", content);
+
+        /**
+         * 通过netty长连接实时推送到easy-web项目，再推送到前端展示
+         */
+        JSONObject data = new JSONObject();
+        data.put("log", content);
+        super.getNettyClient().sendMessage(data);
     }
 }
