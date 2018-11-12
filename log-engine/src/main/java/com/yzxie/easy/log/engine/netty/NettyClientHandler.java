@@ -22,5 +22,9 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, String msg) throws Exception {
         LOG.info("NettyClientHandler received response: {}", msg);
+        if ("ping".equals(msg)) {
+            StringBuilder pong = new StringBuilder("pong").append("\n");
+            channelHandlerContext.writeAndFlush(pong);
+        }
     }
 }
