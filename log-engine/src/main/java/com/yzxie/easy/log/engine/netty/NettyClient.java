@@ -69,10 +69,24 @@ public class NettyClient {
         try {
             // 建立与服务端连接
             future = bootstrap.connect(serverHost, serverPort);
+            // 添加监听器，等future.sync()完成，获取结果
+            future.addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture future) throws Exception {
+                    if (future.isSuccess()) {
+                        // 重置重试次数，以便运行过程中服务端宕机或重启在重连
+                        globalRetryCount = NettyConstants.GLOBAL_RECONNECT_TIMES;
+                        LOG.info("netty client connect {}:{} successfully.", serverHost, serverPort);
+                    } else {
+                        LOG.error("netty client connect {}:{} failure. go to finally to retry.",
+                                serverHost, serverPort);
+                    }
+                }
+            });
             clientChannel = future.sync().channel();
+            // 成功建立连接，获取到clientChannel，阻塞等待关闭
+            LOG.info("clientChannel established.");
             clientChannel.closeFuture().sync();
-            // 重置重试次数，以便运行过程中服务端宕机或重启在重连
-            globalRetryCount = NettyConstants.GLOBAL_RECONNECT_TIMES;
         } catch (Exception e) {
             LOG.error("NettyClient connect {}:{} failed. {}", serverHost, serverPort, e, e.getMessage());
         } finally {
