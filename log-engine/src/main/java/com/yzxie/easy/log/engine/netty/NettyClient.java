@@ -80,6 +80,8 @@ public class NettyClient {
                     } else {
                         LOG.error("netty client connect {}:{} failure. go to finally to retry.",
                                 serverHost, serverPort);
+                        // 也可以放在这里做，不过这里只能处理服务启动时，建立与服务端的连接的时候。
+                        // 如果运行中途，服务端宕机或重启，则无法做重连。
                     }
                 }
             });
