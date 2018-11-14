@@ -25,7 +25,7 @@ public abstract class AbstractEngineHandler implements IEngineHandler {
         messageProcessor.start();
         // 异步启动netty与服务端的连接，避免服务器还没启动
         ScheduledExecutorService asyncStartUpService = Executors.newSingleThreadScheduledExecutor();
-        asyncStartUpService.schedule(new NettyClient.AsyncStartUpTask(nettyClient), 30000, TimeUnit.MILLISECONDS);
+        asyncStartUpService.schedule(new NettyClient.AsyncStartUpTask(nettyClient), 20000, TimeUnit.MILLISECONDS);
     }
 
     public void handle(String content) {

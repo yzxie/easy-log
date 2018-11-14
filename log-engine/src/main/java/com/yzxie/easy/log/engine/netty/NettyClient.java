@@ -2,9 +2,7 @@ package com.yzxie.easy.log.engine.netty;
 
 import com.alibaba.fastjson.JSONObject;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.slf4j.Logger;
@@ -17,7 +15,6 @@ import org.slf4j.LoggerFactory;
  */
 public class NettyClient {
     private static final Logger LOG = LoggerFactory.getLogger(NettyClient.class);
-
     /**
      * 服务端主机
      */
@@ -29,9 +26,24 @@ public class NettyClient {
     private int serverPort;
 
     /**
+     * netty客户端启动器
+     */
+    private Bootstrap bootstrap = new Bootstrap();
+
+    /**
+     * 客户端工作线程池
+     * 客户端不需要accept连接，所以只需要一个group完成连接和发送请求和接收响应
+     */
+    private EventLoopGroup workerGroup = new NioEventLoopGroup();
+
+    /**
      * 与服务端的连接channel
      */
     private Channel clientChannel;
+
+    private ChannelFuture future;
+
+    private int globalRetryCount = NettyConstants.GLOBAL_RECONNECT_TIMES;
 
     public NettyClient(String serverHost, int serverPort) {
         this.serverHost = serverHost;
@@ -42,41 +54,44 @@ public class NettyClient {
      * 建立与netty服务端的连接
      */
     public void connect() {
-        // 客户端不需要accept连接，所以只需要一个group完成连接和发送请求和接收响应
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        int trysCount = 3;
-        boolean succeed = false;
+        // 初始化bootstrap
+        bootstrap.group(workerGroup);
+        bootstrap.channel(NioSocketChannel.class);
+        // TCP相关参数
+        bootstrap.option(ChannelOption.TCP_NODELAY, true);
+        bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+        // 与客户端的channel初始化器
+        bootstrap.handler(new NettyClientInitializer());
+        doConnect();
+    }
 
-        while (!succeed && trysCount > 0) {
-            try {
-                Bootstrap bootstrap = new Bootstrap();
-                bootstrap.group(workerGroup);
-                bootstrap.channel(NioSocketChannel.class);
-                bootstrap.option(ChannelOption.TCP_NODELAY, true);
-                bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
-                bootstrap.handler(new NettyClientInitializer());
-                // 建立与服务端连接
-                clientChannel = bootstrap.connect(serverHost, serverPort).sync().channel();
-                clientChannel.closeFuture().sync();
-                succeed = true;
-            } catch (Exception e) {
-                LOG.error("NettyClient connect {}:{} failed. {}", serverHost, serverPort, e, e.getMessage());
-            } finally {
-                workerGroup.shutdownGracefully();
-            }
-
-            // 重试
-            if (!succeed) {
+    public void doConnect() {
+        try {
+            // 建立与服务端连接
+            future = bootstrap.connect(serverHost, serverPort);
+            clientChannel = future.sync().channel();
+            clientChannel.closeFuture().sync();
+            // 重置重试次数，以便运行过程中服务端宕机或重启在重连
+            globalRetryCount = NettyConstants.GLOBAL_RECONNECT_TIMES;
+        } catch (Exception e) {
+            LOG.error("NettyClient connect {}:{} failed. {}", serverHost, serverPort, e, e.getMessage());
+        } finally {
+            // 如果服务端宕机或重启导致断线，此处重连globalReTryCount次，此处为递归
+            if (globalRetryCount-- > 0) {
+                // 休息5秒
                 try {
-                    Thread.sleep(10000);
-                    trysCount--;
-                } catch (InterruptedException e) {
-
-                }
+                    Thread.sleep(5000);
+                } catch (Exception ignore) {}
+                // 重连
+                LOG.info("NettyClient connection lost. retry {}", globalRetryCount);
+                doConnect();
+            } else {
+                // 重试失败后，关闭连接
+                workerGroup.shutdownGracefully();
+                clientChannel = null;
+                LOG.error("Netty Client retry failure.");
             }
-
         }
-
     }
 
     /**
