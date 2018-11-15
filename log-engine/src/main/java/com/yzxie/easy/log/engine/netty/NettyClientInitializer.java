@@ -1,5 +1,6 @@
 package com.yzxie.easy.log.engine.netty;
 
+import com.yzxie.easy.log.engine.netty.handler.NettyClientHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -27,6 +28,7 @@ public class NettyClientInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
         pipeline.addLast(new StringDecoder(CharsetUtil.UTF_8));
         pipeline.addLast(new StringEncoder(CharsetUtil.UTF_8));
+
         pipeline.addLast(new NettyClientHandler());
     }
 }

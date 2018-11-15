@@ -15,39 +15,25 @@ import org.slf4j.LoggerFactory;
  */
 public class NettyClient {
     private static final Logger LOG = LoggerFactory.getLogger(NettyClient.class);
-    /**
-     * 服务端主机
-     */
-    private String serverHost;
 
-    /**
-     * 服务端端口
-     */
+    private String serverHost;
     private int serverPort;
 
-    /**
-     * netty客户端启动器
-     */
-    private Bootstrap bootstrap = new Bootstrap();
-
+    private Bootstrap bootstrap;
     /**
      * 客户端工作线程池
      * 客户端不需要accept连接，所以只需要一个group完成连接和发送请求和接收响应
      */
-    private EventLoopGroup workerGroup = new NioEventLoopGroup();
-
-    /**
-     * 与服务端的连接channel
-     */
-    private Channel clientChannel;
-
+    private EventLoopGroup workerGroup;
     private ChannelFuture future;
-
+    private Channel clientChannel;
     private int globalRetryCount = NettyConstants.GLOBAL_RECONNECT_TIMES;
 
     public NettyClient(String serverHost, int serverPort) {
         this.serverHost = serverHost;
         this.serverPort = serverPort;
+        this.bootstrap = new Bootstrap();
+        this.workerGroup = new NioEventLoopGroup();
     }
 
     /**
@@ -65,9 +51,11 @@ public class NettyClient {
         doConnect();
     }
 
+    /**
+     * 实际发起与服务端的连接
+     */
     public void doConnect() {
         try {
-            // 建立与服务端连接
             future = bootstrap.connect(serverHost, serverPort);
             // 添加监听器，等future.sync()完成，获取结果
             future.addListener(new ChannelFutureListener() {
@@ -80,14 +68,23 @@ public class NettyClient {
                     } else {
                         LOG.error("netty client connect {}:{} failure. go to finally to retry.",
                                 serverHost, serverPort);
-                        // 也可以放在这里做，不过这里只能处理服务启动时，建立与服务端的连接的时候。
-                        // 如果运行中途，服务端宕机或重启，则无法做重连。
+                        // 此处只能做启动时，服务端还没启动或者连不上的重连。
+                        // 运行过程中，服务端宕机或重启，则无法重连，故统一放在finally进行重连。
+                        /*
+                        doConnect();
+                        //休息5秒
+                        try {
+                            Thread.sleep(5000);
+                        } catch (Exception ignore) {}
+                        */
                     }
                 }
             });
+            // 成功建立连接，获取到clientChannel
             clientChannel = future.sync().channel();
-            // 成功建立连接，获取到clientChannel，阻塞等待关闭
-            LOG.info("clientChannel established.");
+            LOG.debug("clientChannel established.");
+
+            // 阻塞等待关闭
             clientChannel.closeFuture().sync();
         } catch (Exception e) {
             LOG.error("NettyClient connect {}:{} failed. {}", serverHost, serverPort, e, e.getMessage());
@@ -98,8 +95,9 @@ public class NettyClient {
                 try {
                     Thread.sleep(5000);
                 } catch (Exception ignore) {}
-                // 重连
+
                 LOG.info("NettyClient connection lost. retry {}", globalRetryCount);
+                // 重连
                 doConnect();
             } else {
                 // 重试失败后，关闭连接
