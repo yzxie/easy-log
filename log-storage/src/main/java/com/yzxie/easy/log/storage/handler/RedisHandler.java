@@ -1,6 +1,6 @@
 package com.yzxie.easy.log.storage.handler;
 
-import com.yzxie.easy.log.conf.xml.StorageConfig;
+import com.yzxie.easy.log.common.conf.StorageConfig;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;

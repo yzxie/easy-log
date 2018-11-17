@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <kafka>
+        <brokers>
+
+        </brokers>
+        <zookeeper>
+
+        </zookeeper>
+
+        <consumerGroup>
+            <id>app1</id>
+            <topic>
+                <name>StdOut</name>
+                <partitions>1</partitions>
+            </topic>
+            <topic>
+                <name>StdError</name>
+                <partitions>1</partitions>
+            </topic>
+            <topic>
+                <name>Gc</name>
+                <partitions>1</partitions>
+            </topic>
+            <topic>
+                <name>RedisSlowLog</name>
+                <partitions>1</partitions>
+            </topic>
+            <topic>
+                <name>MySQLSlowLog</name>
+                <partitions>1</partitions>
+            </topic>
+        </consumerGroup>
+        <!--<consumerGroup>-->
+            <!--<id>app2</id>-->
+            <!--<topic>-->
+                <!--<name>StdOut</name>-->
+                <!--<partitions>1</partitions>-->
+            <!--</topic>-->
+        <!--</consumerGroup>-->
+    </kafka>
+</config>

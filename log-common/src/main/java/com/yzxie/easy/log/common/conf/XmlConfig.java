@@ -1,6 +1,7 @@
-package com.yzxie.easy.log.conf.xml;
+package com.yzxie.easy.log.common.conf;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
@@ -14,15 +15,15 @@ import java.util.List;
  * @date 29/10/2018 15:15
  * @description:
  */
+@Slf4j
 public class XmlConfig {
-    private static final Logger LOG = LoggerFactory.getLogger(XmlConfig.class);
     private XMLConfiguration xmlConfiguration;
 
     public XmlConfig(String xmlFileName) {
         try {
             xmlConfiguration = new XMLConfiguration(xmlFileName);
         } catch (ConfigurationException e) {
-            LOG.error("construct xml config {} exception", e);
+            log.error("construct xml config {} exception", e);
         }
     }
 

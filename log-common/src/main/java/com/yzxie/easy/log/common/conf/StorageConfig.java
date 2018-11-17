@@ -1,4 +1,4 @@
-package com.yzxie.easy.log.conf.xml;
+package com.yzxie.easy.log.common.conf;
 
 /**
  * @author xieyizun
@@ -15,5 +15,5 @@ public class StorageConfig extends XmlConfig {
     public static final String REDIS_MAX_WAIT = "storage.redis.maxWait";
     public static final String REDIS_TEST_ON_BORROW = "storage.redis.testOnBorrow";
 
-    public StorageConfig() { super("storage.xml"); }
+    public StorageConfig() { super("storageConfig.xml"); }
 }

@@ -5,17 +5,15 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author xieyizun
  * @date 11/11/2018 22:08
  * @description:
  */
+@Slf4j
 public class NettyClient {
-    private static final Logger LOG = LoggerFactory.getLogger(NettyClient.class);
-
     private String serverHost;
     private int serverPort;
 
@@ -64,9 +62,9 @@ public class NettyClient {
                     if (future.isSuccess()) {
                         // 重置重试次数，以便运行过程中服务端宕机或重启在重连
                         globalRetryCount = NettyConstants.GLOBAL_RECONNECT_TIMES;
-                        LOG.info("netty client connect {}:{} successfully.", serverHost, serverPort);
+                        log.info("netty client connect {}:{} successfully.", serverHost, serverPort);
                     } else {
-                        LOG.error("netty client connect {}:{} failure. go to finally to retry.",
+                        log.error("netty client connect {}:{} failure. go to finally to retry.",
                                 serverHost, serverPort);
                         // 此处只能做启动时，服务端还没启动或者连不上的重连。
                         // 运行过程中，服务端宕机或重启，则无法重连，故统一放在finally进行重连。
@@ -82,12 +80,12 @@ public class NettyClient {
             });
             // 成功建立连接，获取到clientChannel
             clientChannel = future.sync().channel();
-            LOG.debug("clientChannel established.");
+            log.debug("clientChannel established.");
 
             // 阻塞等待关闭
             clientChannel.closeFuture().sync();
         } catch (Exception e) {
-            LOG.error("NettyClient connect {}:{} failed. {}", serverHost, serverPort, e, e.getMessage());
+            log.error("NettyClient connect {}:{} failed. {}", serverHost, serverPort, e, e.getMessage());
         } finally {
             // 如果服务端宕机或重启导致断线，此处重连globalReTryCount次，此处为递归
             if (globalRetryCount-- > 0) {
@@ -96,14 +94,14 @@ public class NettyClient {
                     Thread.sleep(5000);
                 } catch (Exception ignore) {}
 
-                LOG.info("NettyClient connection lost. retry {}", globalRetryCount);
+                log.info("NettyClient connection lost. retry {}", globalRetryCount);
                 // 重连
                 doConnect();
             } else {
                 // 重试失败后，关闭连接
                 workerGroup.shutdownGracefully();
                 clientChannel = null;
-                LOG.error("Netty Client retry failure.");
+                log.error("Netty Client retry failure.");
             }
         }
     }
@@ -118,7 +116,7 @@ public class NettyClient {
             request.append(data);
             request.append("\n");
             clientChannel.writeAndFlush(request);
-            LOG.info("NettyClient sendMessage: {}", request);
+            log.info("NettyClient sendMessage: {}", request);
         }
     }
 

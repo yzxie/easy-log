@@ -1,5 +1,6 @@
 package com.yzxie.easy.log.collector.kafka;
 
+import com.yzxie.easy.log.common.kafka.KafkaTopic;
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
 import kafka.javaapi.consumer.ConsumerConnector;
@@ -13,22 +14,13 @@ import static org.apache.kafka.clients.consumer.ConsumerConfig.*;
  * @description:
  */
 public class MessageConsumerFactory {
-
-    public static MessageConsumer creatMessageConsumer(String topicName) {
-        return create0(topicName, "default", 1);
+    public static MessageConsumer createMessageConsumer(KafkaTopic kafkaTopic, String groupId) {
+        return create(kafkaTopic, groupId);
     }
 
-    public static MessageConsumer createMessageConsumer(String topicName, String groupId) {
-        return create0(topicName, groupId, 1);
-    }
-
-    public static MessageConsumer createMessageConsumer(String topicName, String groupId, int partitions) {
-        return create0(topicName, groupId, partitions);
-    }
-
-    private static MessageConsumer create0(String topicName, String groupId, int partitions) {
+    private static MessageConsumer create(KafkaTopic kafkaTopic, String groupId) {
         ConsumerConnector consumerConnector = Consumer.createJavaConsumerConnector(intConsumerConfig(groupId));
-        return new MessageConsumer(topicName, consumerConnector, partitions);
+        return new MessageConsumer(kafkaTopic, consumerConnector);
     }
 
     private static ConsumerConfig intConsumerConfig(String groupId) {

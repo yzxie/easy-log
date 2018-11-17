@@ -1,5 +1,9 @@
 package com.yzxie.easy.log.collector.kafka;
 
+import org.apache.zookeeper.Op;
+
+import java.util.Optional;
+
 /**
  * @author xieyizun
  * @date 26/10/2018 17:36
@@ -7,15 +11,16 @@ package com.yzxie.easy.log.collector.kafka;
  */
 public class KafkaMessage {
     private String topic;
-    /**
-     * partition key. optional
-     */
-    private String key;
+    // partition key. optional
+    private Optional<String> key;
     private String content;
 
     public KafkaMessage(String topic, String key, String content) {
         this.topic = topic;
-        this.key = key;
+        if (key != null) {
+            this.key = Optional.of(key);
+        }
+
         this.content = content;
     }
 
@@ -27,12 +32,12 @@ public class KafkaMessage {
         this.topic = topic;
     }
 
-    public String getKey() {
+    public Optional<String> getKey() {
         return key;
     }
 
     public void setKey(String key) {
-        this.key = key;
+        this.key = Optional.of(key);
     }
 
     public String getContent() {

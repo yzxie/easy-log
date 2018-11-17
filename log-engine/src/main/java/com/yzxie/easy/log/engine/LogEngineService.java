@@ -1,40 +1,34 @@
 package com.yzxie.easy.log.engine;
 
-import com.yzxie.easy.log.common.TopicContainer;
+import com.yzxie.easy.log.common.data.log.ILogMessage;
+import com.yzxie.easy.log.common.data.log.LogType;
 import com.yzxie.easy.log.common.service.AbstractService;
+import com.yzxie.easy.log.engine.handler.EngineHandlerFactory;
 import com.yzxie.easy.log.engine.handler.IEngineHandler;
-import com.yzxie.easy.log.engine.handler.SimpleEngineHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.yzxie.easy.log.engine.push.WebPushService;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author xieyizun
  * @date 26/10/2018 15:34
  * @description:
  */
+@Slf4j
 public class LogEngineService extends AbstractService {
-    private static final Logger LOG = LoggerFactory.getLogger(LogEngineService.class);
-
-    /**
-     * key is kafka topic, which is a service ip or host
-     * value is the engine handler
-     */
-    private static Map<String, IEngineHandler> logEngineHandlerMap;
+    private static Map<LogType, IEngineHandler> logEngineHandlers;
+    private WebPushService webPushService;
 
     @Override
     public void start() {
-        LOG.info("LogEngineService starting.");
-        List<String> topicLists = TopicContainer.listTopics();
-        logEngineHandlerMap = new ConcurrentHashMap<>(topicLists.size());
-        for (int i = 0; i < TopicContainer.listTopics().size(); i++) {
-            String topicName = topicLists.get(i);
-            logEngineHandlerMap.put(topicName, new SimpleEngineHandler(topicName));
+        this.logEngineHandlers = new HashMap<>(LogType.size());
+        for (LogType logTypeSupport : LogType.values()) {
+            logEngineHandlers.put(logTypeSupport, EngineHandlerFactory.getEngineHandler(logTypeSupport));
         }
-        LOG.info("LogEngineService started successfully");
+        this.webPushService = new WebPushService();
+        log.info("LogEngineService started successfully");
 
         startNext();
     }
@@ -44,9 +38,24 @@ public class LogEngineService extends AbstractService {
         stopNext();
     }
 
-    public static void dispatch(String topicName, String content) {
-        if (logEngineHandlerMap.get(topicName) != null) {
-            logEngineHandlerMap.get(topicName).handle(content);
+    public static void dispatch(ILogMessage logMessage) {
+        if (logEngineHandlers.get(logMessage.getLogType()) != null) {
+            logEngineHandlers.get(logMessage.getLogType()).handle(logMessage);
+        } else {
+            log.error("logType: {} is not supported.", logMessage.getLogType());
         }
+    }
+
+    /**
+     * 单例实现
+     */
+    private LogEngineService() {}
+
+    private static class InstanceHolder {
+        public static LogEngineService instance = new LogEngineService();
+    }
+
+    public static LogEngineService getInstance() {
+        return InstanceHolder.instance;
     }
 }

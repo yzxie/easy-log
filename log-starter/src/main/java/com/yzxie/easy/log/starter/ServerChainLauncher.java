@@ -15,8 +15,8 @@ public final class ServerChainLauncher {
 
     public void init() {
         serverChain.init()
-                    .setNextServer(new LogCollectorService())
-                    .setNextServer(new LogEngineService())
+                    .setNextServer(LogCollectorService.getInstance())
+                    .setNextServer(LogEngineService.getInstance())
                     .setNextServer(new LogStorageService())
                     .setNextServer(new LogRpcService());
     }
