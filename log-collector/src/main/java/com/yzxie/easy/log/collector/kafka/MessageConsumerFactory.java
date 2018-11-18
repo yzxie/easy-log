@@ -20,7 +20,7 @@ public class MessageConsumerFactory {
 
     private static MessageConsumer create(KafkaTopic kafkaTopic, String groupId) {
         ConsumerConnector consumerConnector = Consumer.createJavaConsumerConnector(intConsumerConfig(groupId));
-        return new MessageConsumer(kafkaTopic, consumerConnector);
+        return new MessageConsumer(groupId, kafkaTopic, consumerConnector);
     }
 
     private static ConsumerConfig intConsumerConfig(String groupId) {

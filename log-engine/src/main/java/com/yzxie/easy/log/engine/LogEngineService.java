@@ -18,12 +18,11 @@ import java.util.Map;
  */
 @Slf4j
 public class LogEngineService extends AbstractService {
-    private static Map<LogType, IEngineHandler> logEngineHandlers;
+    private static Map<LogType, IEngineHandler> logEngineHandlers = new HashMap<>(LogType.size());
     private WebPushService webPushService;
 
     @Override
     public void start() {
-        this.logEngineHandlers = new HashMap<>(LogType.size());
         for (LogType logTypeSupport : LogType.values()) {
             logEngineHandlers.put(logTypeSupport, EngineHandlerFactory.getEngineHandler(logTypeSupport));
         }

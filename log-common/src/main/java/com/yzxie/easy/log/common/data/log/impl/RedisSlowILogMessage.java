@@ -12,8 +12,8 @@ import lombok.Data;
 @Data
 public class RedisSlowILogMessage extends AbstractLogMessage {
 
-    public RedisSlowILogMessage(String content) {
-        super(content);
+    public RedisSlowILogMessage(String appId, String content) {
+        super(appId, content);
     }
 
     public LogType getLogType() {

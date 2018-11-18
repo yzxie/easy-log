@@ -11,8 +11,8 @@ import lombok.Data;
  */
 @Data
 public class StdErrorILogMessage extends AbstractLogMessage {
-    public StdErrorILogMessage(String content) {
-        super(content);
+    public StdErrorILogMessage(String appId, String content) {
+        super(appId, content);
     }
 
     public LogType getLogType() {

@@ -11,8 +11,8 @@ import lombok.Data;
  */
 @Data
 public class GcILogMessage extends AbstractLogMessage {
-    public GcILogMessage(String content) {
-        super(content);
+    public GcILogMessage(String appId, String content) {
+        super(appId, content);
     }
 
     public LogType getLogType() {

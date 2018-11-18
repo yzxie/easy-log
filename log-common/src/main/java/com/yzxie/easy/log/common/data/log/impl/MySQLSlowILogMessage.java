@@ -12,8 +12,8 @@ import lombok.Data;
 @Data
 public class MySQLSlowILogMessage extends AbstractLogMessage {
 
-    public MySQLSlowILogMessage(String content) {
-        super(content);
+    public MySQLSlowILogMessage(String appId, String content) {
+        super(appId, content);
     }
 
     public LogType getLogType() {

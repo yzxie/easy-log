@@ -29,7 +29,6 @@ public class KafkaMessageHandler {
                 groupId);
         this.executorService = Executors.newFixedThreadPool(topic.getPartitions());
         for (int partitionIndex = 0; partitionIndex < topic.getPartitions(); partitionIndex++) {
-            //executorService.schedule(new PartitionMessageProcessor(partitionIndex), 10, TimeUnit.SECONDS);
             executorService.execute(new PartitionMessageProcessor(partitionIndex));
         }
     }
@@ -50,7 +49,9 @@ public class KafkaMessageHandler {
                 if (messageConsumer.hasNext(partitionIndex)) {
                     KafkaMessage kafkaMessage = messageConsumer.next(partitionIndex);
                     if (kafkaMessage != null) {
-                        LogEngineService.dispatch(LogMessageBuilder.createLogMessage(kafkaMessage.getTopic(),
+                        LogEngineService.dispatch(LogMessageBuilder.createLogMessage(
+                                messageConsumer.getGroupId(),
+                                kafkaMessage.getTopic(),
                                 kafkaMessage.getContent()));
                     }
                 }

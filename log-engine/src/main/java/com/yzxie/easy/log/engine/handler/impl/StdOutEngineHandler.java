@@ -1,6 +1,7 @@
 package com.yzxie.easy.log.engine.handler.impl;
 
 import com.yzxie.easy.log.common.data.log.impl.StdOutILogMessage;
+import com.yzxie.easy.log.engine.bussine.SecondLevelFlow;
 import com.yzxie.easy.log.engine.bussine.TopTenApi;
 import com.yzxie.easy.log.engine.handler.AbstractEngineHandler;
 import com.yzxie.easy.log.storage.LogStorageService;
@@ -29,10 +30,9 @@ public class StdOutEngineHandler extends AbstractEngineHandler<StdOutILogMessage
          */
         processTopTenApi(logMessage);
         processMinuteLevelFlow(logMessage);
-
         /**
          * 将日志存储到Redis或HBase，之后进行离线分析
-        */
+         */
         LogStorageService.dispatch(logMessage);
     }
 
@@ -41,6 +41,6 @@ public class StdOutEngineHandler extends AbstractEngineHandler<StdOutILogMessage
     }
 
     private void processMinuteLevelFlow(StdOutILogMessage logMessage) {
-
+        this.executorService.execute(new SecondLevelFlow(logMessage));
     }
 }

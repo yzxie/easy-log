@@ -9,9 +9,11 @@ import lombok.Data;
  */
 @Data
 public abstract class AbstractLogMessage implements ILogMessage {
+    private String appId;
     private String content;
 
-    public AbstractLogMessage(String content) {
+    public AbstractLogMessage(String appId, String content) {
+        this.appId = appId;
         this.content = content;
     }
 }

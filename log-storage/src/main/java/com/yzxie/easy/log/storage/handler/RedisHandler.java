@@ -41,10 +41,11 @@ public class RedisHandler {
         }
         jedisConnectionFactory.setPoolConfig(jedisPoolConfig);
         jedisConnectionFactory.setUsePool(true);
+        jedisConnectionFactory.setDatabase(1);
         jedisConnectionFactory.afterPropertiesSet();
 
         /**
-         * redisTemplate初始化
+         * redisTemplate初始化，redisTemplate是线程安全
          */
         redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(jedisConnectionFactory);
@@ -55,6 +56,10 @@ public class RedisHandler {
         //处理异常
         //java.lang.IllegalArgumentException: template not initialized; call afterPropertiesSet() before using it
         redisTemplate.afterPropertiesSet();
+    }
+
+    public static RedisTemplate getRedisTemplate() {
+        return redisTemplate;
     }
 
     /**
@@ -109,20 +114,6 @@ public class RedisHandler {
     public static void addZSet(String key, String value, double score) {
         BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
         operations.add(value, score);
-    }
-
-    public static List<Map<String, Object>> getTop10WithScore(String key) {
-        List<Map<String, Object>> zSetValues = new ArrayList<>();
-        BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
-        Set<ZSetOperations.TypedTuple<String>> valuesWithScore = operations.rangeWithScores(0, 10);
-
-        for (ZSetOperations.TypedTuple<String> value : valuesWithScore) {
-            Map<String, Object> valueScoreMap = new HashMap<>();
-            valueScoreMap.put("value", value.getValue());
-            valueScoreMap.put("score", value.getScore());
-            zSetValues.add(valueScoreMap);
-        }
-        return zSetValues;
     }
 
     public static double getScore(String key, String value) {

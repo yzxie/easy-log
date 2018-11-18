@@ -19,14 +19,14 @@ public class LogQueryService implements LogQueryServiceApi {
     @Override
     public List<ApiRank> getRankingOfApiCall(String host) {
         List<ApiRank> apiRanks = new ArrayList<>();
-        List<Map<String, Object>> apiRequestCountList = RedisHandler.getTop10WithScore(host);
-
-        for (Map<String, Object> apiRequestCount : apiRequestCountList) {
-            ApiRank apiRank = new ApiRank();
-            apiRank.setApiPath(apiRequestCount.get("value").toString());
-            apiRank.setRequestCount(NumberUtils.toLong(apiRequestCount.get("score").toString()));
-            apiRanks.add(apiRank);
-        }
+//        List<Map<String, Object>> apiRequestCountList = RedisHandler.getTop10WithScore(host);
+//
+//        for (Map<String, Object> apiRequestCount : apiRequestCountList) {
+//            ApiRank apiRank = new ApiRank();
+//            apiRank.setApiPath(apiRequestCount.get("value").toString());
+//            apiRank.setRequestCount(NumberUtils.toLong(apiRequestCount.get("score").toString()));
+//            apiRanks.add(apiRank);
+//        }
         // 消息不能太大，否则dubbo报错：Dubbo client can not supported string message
         return apiRanks.size() > 10 ? apiRanks.subList(0, 10) : apiRanks;
     }

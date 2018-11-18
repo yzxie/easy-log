@@ -16,6 +16,11 @@
             <groupId>com.yzxie</groupId>
             <artifactId>log-conf</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

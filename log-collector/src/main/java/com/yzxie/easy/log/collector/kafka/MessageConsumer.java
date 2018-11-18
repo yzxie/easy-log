@@ -23,6 +23,7 @@ import java.util.Map;
  */
 @Slf4j
 public class MessageConsumer {
+    private String groupId;
     private KafkaTopic kafkaTopic;
     /**
      * 主题的多个分区列表，每个分区对应一个迭代器
@@ -30,10 +31,11 @@ public class MessageConsumer {
     private List<ConsumerIterator<byte[], byte[]>> partitionsIterators;
     private ConsumerConnector consumerConnector;
 
-    public MessageConsumer(KafkaTopic kafkaTopic, ConsumerConnector consumerConnector) {
+    public MessageConsumer(String groupId, KafkaTopic kafkaTopic, ConsumerConnector consumerConnector) {
         if (kafkaTopic.getPartitions() < 0) {
             throw new RuntimeException("construct message consumer failure");
         }
+        this.groupId = groupId;
         this.kafkaTopic = kafkaTopic;
         this.partitionsIterators = new ArrayList<>(kafkaTopic.getPartitions());
         this.consumerConnector = consumerConnector;
@@ -124,4 +126,8 @@ public class MessageConsumer {
 
     // todo 启动时清空kafka数据
     public void consumeHistory() {}
+
+    public final String getGroupId() {
+        return groupId;
+    }
 }
