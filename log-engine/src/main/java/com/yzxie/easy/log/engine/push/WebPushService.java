@@ -7,9 +7,10 @@ import com.yzxie.easy.log.common.data.bussine.SecondRequestStat;
 import com.yzxie.easy.log.common.kafka.KafkaGroup;
 import com.yzxie.easy.log.engine.bussine.SecondLevelFlow;
 import com.yzxie.easy.log.engine.bussine.TopTenApi;
-import com.yzxie.easy.log.engine.netty.NettyClient;
-import com.yzxie.easy.log.engine.netty.NettyConstants;
+import com.yzxie.easy.log.engine.push.netty.NettyClient;
+import com.yzxie.easy.log.engine.push.netty.NettyConstants;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -38,7 +39,7 @@ public class WebPushService {
 
         // 每30秒推送一次最近300秒的每秒的访问统计
         ScheduledExecutorService secondLevelFlowPush = Executors.newSingleThreadScheduledExecutor();
-        secondLevelFlowPush.scheduleAtFixedRate(new PushSecondLevelFlowTask(), 5, 5, TimeUnit.SECONDS);
+        secondLevelFlowPush.scheduleAtFixedRate(new PushSecondLevelFlowTask(), 15, 15, TimeUnit.SECONDS);
     }
 
     private class PushTopTenApiTask implements Runnable {
@@ -64,6 +65,9 @@ public class WebPushService {
             for (KafkaGroup kafkaGroup : kafkaGroups) {
                 String appId = kafkaGroup.getGroupId();
                 List<SecondRequestStat> secondRequestStats = SecondLevelFlow.getSecondRequestStat(appId);
+                if (secondRequestStats != null) {
+                    Collections.reverse(secondRequestStats);
+                }
                 pushData.put(appId, secondRequestStats);
             }
 

@@ -13,14 +13,14 @@ import java.util.Arrays;
  * @description:
  */
 @Data
-public class StdOutILogMessage extends AbstractLogMessage {
+public class StdOutLogMessage extends AbstractLogMessage {
     private String requestTime; // 2018-11-18 15:42:12
     private String clientIp;
     private String apiPath;
     private Long costTime; // ms
     private JSONObject msg; // 应用相关数据，如产品，用户等
 
-    public StdOutILogMessage(String appId, String content) {
+    public StdOutLogMessage(String appId, String content) {
         super(appId, content);
         populateValues();
     }

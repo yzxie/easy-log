@@ -1,8 +1,7 @@
 package com.yzxie.easy.log.engine.bussine;
 
-import com.yzxie.easy.log.common.data.ApiRank;
 import com.yzxie.easy.log.common.data.bussine.ApiAccessStat;
-import com.yzxie.easy.log.common.data.log.impl.StdOutILogMessage;
+import com.yzxie.easy.log.common.data.log.impl.StdOutLogMessage;
 import com.yzxie.easy.log.storage.handler.RedisHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.BoundZSetOperations;
@@ -19,16 +18,16 @@ import java.util.*;
 @Slf4j
 public class TopTenApi implements Runnable {
     public static final String TOP_TEN_API_PREFIX = "top_ten_api:";
-    private StdOutILogMessage stdOutILogMessage;
+    private StdOutLogMessage stdOutLogMessage;
 
-    public TopTenApi(StdOutILogMessage stdOutILogMessage) {
-        this.stdOutILogMessage = stdOutILogMessage;
+    public TopTenApi(StdOutLogMessage stdOutLogMessage) {
+        this.stdOutLogMessage = stdOutLogMessage;
     }
 
     @Override
     public void run() {
-        String appId = stdOutILogMessage.getAppId();
-        String apiPath = stdOutILogMessage.getApiPath();
+        String appId = stdOutLogMessage.getAppId();
+        String apiPath = stdOutLogMessage.getApiPath();
         RedisHandler.increaseScore(TOP_TEN_API_PREFIX+appId, apiPath);
     }
 

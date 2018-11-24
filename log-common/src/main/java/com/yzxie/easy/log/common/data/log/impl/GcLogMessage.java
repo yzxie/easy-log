@@ -6,17 +6,16 @@ import lombok.Data;
 
 /**
  * @author xieyizun
- * @date 17/11/2018 17:15
+ * @date 17/11/2018 17:14
  * @description:
  */
 @Data
-public class RedisSlowILogMessage extends AbstractLogMessage {
-
-    public RedisSlowILogMessage(String appId, String content) {
+public class GcLogMessage extends AbstractLogMessage {
+    public GcLogMessage(String appId, String content) {
         super(appId, content);
     }
 
     public LogType getLogType() {
-        return LogType.REDIS_SLOW_LOG;
+        return LogType.GC;
     }
 }

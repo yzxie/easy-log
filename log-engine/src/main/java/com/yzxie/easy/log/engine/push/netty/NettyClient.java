@@ -1,4 +1,4 @@
-package com.yzxie.easy.log.engine.netty;
+package com.yzxie.easy.log.engine.push.netty;
 
 import com.alibaba.fastjson.JSONObject;
 import io.netty.bootstrap.Bootstrap;

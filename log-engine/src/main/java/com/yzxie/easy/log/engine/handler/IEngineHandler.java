@@ -6,5 +6,6 @@ package com.yzxie.easy.log.engine.handler;
  * @description:
  */
 public interface IEngineHandler<T> {
+    IEngineHandler startUp();
     void handle(T logMessage);
 }

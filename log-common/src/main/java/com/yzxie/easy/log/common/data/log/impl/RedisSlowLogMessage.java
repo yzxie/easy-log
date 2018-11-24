@@ -10,13 +10,13 @@ import lombok.Data;
  * @description:
  */
 @Data
-public class MySQLSlowILogMessage extends AbstractLogMessage {
+public class RedisSlowLogMessage extends AbstractLogMessage {
 
-    public MySQLSlowILogMessage(String appId, String content) {
+    public RedisSlowLogMessage(String appId, String content) {
         super(appId, content);
     }
 
     public LogType getLogType() {
-        return LogType.MYSQL_SLOW_LOG;
+        return LogType.REDIS_SLOW_LOG;
     }
 }

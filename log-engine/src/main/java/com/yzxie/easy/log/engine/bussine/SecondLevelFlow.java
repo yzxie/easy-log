@@ -1,7 +1,7 @@
 package com.yzxie.easy.log.engine.bussine;
 
 import com.yzxie.easy.log.common.data.bussine.SecondRequestStat;
-import com.yzxie.easy.log.common.data.log.impl.StdOutILogMessage;
+import com.yzxie.easy.log.common.data.log.impl.StdOutLogMessage;
 import com.yzxie.easy.log.common.utils.TimeUtils;
 import com.yzxie.easy.log.storage.handler.RedisHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -23,18 +23,18 @@ public class SecondLevelFlow implements Runnable {
     private static final String SECOND_REQUEST_PREFIX = "second_request:"; // 根据访问量作为score排序
     private static final String SECOND_TIMESTAMP_PREFIX = "second_timestamp:"; // 根据时间戳作为score排序
     private static final RedisTemplate redisTemplate = RedisHandler.getRedisTemplate();
-    private static final int STAT_SECONDS = 300;
+    private static final int STAT_SECONDS = 120;
 
-    private StdOutILogMessage stdOutILogMessage;
+    private StdOutLogMessage stdOutLogMessage;
 
-    public SecondLevelFlow(StdOutILogMessage stdOutILogMessage) {
-        this.stdOutILogMessage = stdOutILogMessage;
+    public SecondLevelFlow(StdOutLogMessage stdOutLogMessage) {
+        this.stdOutLogMessage = stdOutLogMessage;
     }
 
     @Override
     public void run() {
-        String appId = stdOutILogMessage.getAppId();
-        String requestTime = stdOutILogMessage.getRequestTime();
+        String appId = stdOutLogMessage.getAppId();
+        String requestTime = stdOutLogMessage.getRequestTime();
         double requestMills = TimeUtils.parseTimeStamp(requestTime);
 
         redisTemplate.executePipelined(new SessionCallback<Object>() {

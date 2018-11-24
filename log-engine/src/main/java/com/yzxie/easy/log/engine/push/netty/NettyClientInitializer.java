@@ -1,6 +1,6 @@
-package com.yzxie.easy.log.engine.netty;
+package com.yzxie.easy.log.engine.push.netty;
 
-import com.yzxie.easy.log.engine.netty.handler.NettyClientHandler;
+import com.yzxie.easy.log.engine.push.netty.handler.NettyClientHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;

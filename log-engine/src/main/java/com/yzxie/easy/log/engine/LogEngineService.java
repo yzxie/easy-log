@@ -24,7 +24,7 @@ public class LogEngineService extends AbstractService {
     @Override
     public void start() {
         for (LogType logTypeSupport : LogType.values()) {
-            logEngineHandlers.put(logTypeSupport, EngineHandlerFactory.getEngineHandler(logTypeSupport));
+            logEngineHandlers.put(logTypeSupport, EngineHandlerFactory.getEngineHandler(logTypeSupport).startUp());
         }
         this.webPushService = new WebPushService();
         log.info("LogEngineService started successfully");

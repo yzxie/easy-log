@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
  * @description:
  */
 public enum LogType {
-    STDOUT("StdOut"), STDERROR("StdError"), GC("Gc"), REDIS_SLOW_LOG("RedisSlowILogMessage"),
-    MYSQL_SLOW_LOG("MySQLSlowILogMessage");
+    STDOUT("StdOut"), STDERROR("StdError"), GC("Gc"), REDIS_SLOW_LOG("RedisSlowLogMessage"),
+    MYSQL_SLOW_LOG("MySQLSlowLogMessage");
 
     private final String name;
 
@@ -29,5 +29,9 @@ public enum LogType {
 
     public static List<String> getNames() {
         return Arrays.stream(LogType.values()).map(value -> value.getName()).collect(Collectors.toList());
+    }
+
+    public static boolean contains(String name) {
+        return getNames().contains(name);
     }
 }

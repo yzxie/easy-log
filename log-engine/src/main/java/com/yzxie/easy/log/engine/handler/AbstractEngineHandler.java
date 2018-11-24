@@ -1,11 +1,10 @@
 package com.yzxie.easy.log.engine.handler;
 
 import com.yzxie.easy.log.common.data.log.ILogMessage;
-import com.yzxie.easy.log.engine.netty.NettyClient;
-import com.yzxie.easy.log.engine.netty.NettyConstants;
+import com.yzxie.easy.log.engine.push.netty.NettyClient;
+import com.yzxie.easy.log.engine.push.netty.NettyConstants;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.*;
 
 /**
@@ -15,16 +14,28 @@ import java.util.concurrent.*;
  */
 @Slf4j
 public abstract class AbstractEngineHandler<T extends ILogMessage> implements IEngineHandler<T> {
-    // 日志量太大，有撑爆内存的风险
-    private BlockingQueue<T> messagesList = new LinkedBlockingQueue<>();
-    private MessageProcessor messageProcessor = new MessageProcessor();
+    private BlockingQueue<T> messageList;
+    private MessageProcessor messageProcessor;
 
-    public AbstractEngineHandler() {
-        messageProcessor.start();
+    /**
+     * 初始化
+     * @return
+     */
+    public IEngineHandler startUp() {
+        messageList = new LinkedBlockingQueue<>();
+        messageProcessor = new MessageProcessor(messageList);
+        ExecutorService messageProcessPool = Executors.newSingleThreadExecutor();
+        messageProcessPool.execute(messageProcessor);
+        return this;
     }
 
+    /**
+     * 暂存消息到消息队列，保证每种类型消息的顺序性
+     * 默认实现为单个消息队列，单个生产者
+     * @param logMessage
+     */
     public void handle(T logMessage) {
-        messagesList.add(logMessage);
+        messageList.add(logMessage);
     }
 
     protected abstract void process(T logMessage);
@@ -32,13 +43,19 @@ public abstract class AbstractEngineHandler<T extends ILogMessage> implements IE
     /**
      * 引擎日志分析处理器
      */
-    private class MessageProcessor extends Thread {
+    protected class MessageProcessor implements Runnable {
+        private BlockingQueue<T> messageList;
+
+        public MessageProcessor(BlockingQueue<T> messageList) {
+            this.messageList = messageList;
+        }
+
         @Override
         public void run() {
             T logMessage;
-            while (!isInterrupted()) {
+            while (true) {
                 try {
-                    if ((logMessage = messagesList.take()) != null) {
+                    if ((logMessage = messageList.take()) != null) {
                         process(logMessage);
                     }
                 } catch (Exception e) {

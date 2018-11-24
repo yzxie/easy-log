@@ -10,12 +10,12 @@ import lombok.Data;
  * @description:
  */
 @Data
-public class GcILogMessage extends AbstractLogMessage {
-    public GcILogMessage(String appId, String content) {
+public class StdErrorLogMessage extends AbstractLogMessage {
+    public StdErrorLogMessage(String appId, String content) {
         super(appId, content);
     }
 
     public LogType getLogType() {
-        return LogType.GC;
+        return LogType.STDERROR;
     }
 }

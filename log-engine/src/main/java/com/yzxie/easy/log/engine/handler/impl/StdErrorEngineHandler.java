@@ -1,6 +1,6 @@
 package com.yzxie.easy.log.engine.handler.impl;
 
-import com.yzxie.easy.log.common.data.log.impl.StdErrorILogMessage;
+import com.yzxie.easy.log.common.data.log.impl.StdErrorLogMessage;
 import com.yzxie.easy.log.engine.handler.AbstractEngineHandler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,9 +10,9 @@ import lombok.extern.slf4j.Slf4j;
  * @description:
  */
 @Slf4j
-public class StdErrorEngineHandler extends AbstractEngineHandler<StdErrorILogMessage> {
+public class StdErrorEngineHandler extends AbstractEngineHandler<StdErrorLogMessage> {
     @Override
-    protected void process(StdErrorILogMessage logMessage) {
+    protected void process(StdErrorLogMessage logMessage) {
         log.info("process log {}", logMessage);
     }
 }

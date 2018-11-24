@@ -1,4 +1,4 @@
-package com.yzxie.easy.log.engine.netty.handler;
+package com.yzxie.easy.log.engine.push.netty.handler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

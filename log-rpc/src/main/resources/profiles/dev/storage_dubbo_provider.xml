@@ -20,7 +20,11 @@
     <dubbo:service interface="com.yzxie.easy.log.common.api.LogQueryServiceApi"
                    ref="logStorageService"
                    registry="zookeeper" />
+    <dubbo:service interface="com.yzxie.easy.log.common.api.LogConfServiceApi"
+                   ref="logConfService"
+                   registry="zookeeper" />
 
     <!-- 和本地bean一样实现服务 -->
     <bean id="logStorageService" class="com.yzxie.easy.log.rpc.service.LogQueryService" />
+    <bean id="logConfService" class="com.yzxie.easy.log.rpc.service.LogConfService" />
 </beans>

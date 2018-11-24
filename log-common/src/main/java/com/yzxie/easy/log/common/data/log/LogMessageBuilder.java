@@ -30,28 +30,28 @@ public class LogMessageBuilder {
         return null;
     }
 
-    public static StdOutILogMessage stdOutILogMessage(String appId, String content) {
+    public static StdOutLogMessage stdOutILogMessage(String appId, String content) {
 
-        return new StdOutILogMessage(appId, content);
+        return new StdOutLogMessage(appId, content);
     }
 
-    public static StdErrorILogMessage stdErrorILogMessage(String appId, String content) {
+    public static StdErrorLogMessage stdErrorILogMessage(String appId, String content) {
 
-        return new StdErrorILogMessage(appId, content);
+        return new StdErrorLogMessage(appId, content);
     }
 
-    public static GcILogMessage gcILogMessage(String appId, String content) {
+    public static GcLogMessage gcILogMessage(String appId, String content) {
 
-        return new GcILogMessage(appId, content);
+        return new GcLogMessage(appId, content);
     }
 
-    public static MySQLSlowILogMessage mySQLSlowILogMessage(String appId, String content) {
+    public static MySQLSlowLogMessage mySQLSlowILogMessage(String appId, String content) {
 
-        return new MySQLSlowILogMessage(appId, content);
+        return new MySQLSlowLogMessage(appId, content);
     }
 
-    public static RedisSlowILogMessage redisSlowILogMessage(String appId, String content) {
+    public static RedisSlowLogMessage redisSlowILogMessage(String appId, String content) {
 
-        return new RedisSlowILogMessage(appId, content);
+        return new RedisSlowLogMessage(appId, content);
     }
 }

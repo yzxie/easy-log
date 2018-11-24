@@ -6,16 +6,17 @@ import lombok.Data;
 
 /**
  * @author xieyizun
- * @date 17/11/2018 17:14
+ * @date 17/11/2018 17:15
  * @description:
  */
 @Data
-public class StdErrorILogMessage extends AbstractLogMessage {
-    public StdErrorILogMessage(String appId, String content) {
+public class MySQLSlowLogMessage extends AbstractLogMessage {
+
+    public MySQLSlowLogMessage(String appId, String content) {
         super(appId, content);
     }
 
     public LogType getLogType() {
-        return LogType.STDERROR;
+        return LogType.MYSQL_SLOW_LOG;
     }
 }
