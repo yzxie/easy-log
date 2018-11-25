@@ -1,6 +1,5 @@
 package com.yzxie.easy.log.common.conf;
 
-import com.yzxie.easy.log.common.kafka.KafkaGroup;
 import com.yzxie.easy.log.common.kafka.KafkaTopic;
 import org.junit.Test;
 
@@ -13,12 +12,12 @@ public class KafkaConfTest {
 
     @Test
     public void testKafkaTopicsParse() {
-        for (KafkaGroup kafkaGroup : KafkaConfig.listKafkaGroup()) {
-            System.out.println(kafkaGroup.getGroupId());
-            for (KafkaTopic kafkaTopic : kafkaGroup.getKafkaTopicList()) {
-                System.out.print(kafkaTopic.getName() + " " + kafkaTopic.getPartitions() + ", ");
-            }
-            System.out.println();
-        }
+//        for (KafkaGroup kafkaGroup : KafkaConfig.listKafkaGroup()) {
+//            System.out.println(kafkaGroup.getGroupId());
+//            for (KafkaTopic kafkaTopic : kafkaGroup.getKafkaTopicList()) {
+//                System.out.print(kafkaTopic.getName() + " " + kafkaTopic.getPartitions() + ", ");
+//            }
+//            System.out.println();
+//        }
     }
 }

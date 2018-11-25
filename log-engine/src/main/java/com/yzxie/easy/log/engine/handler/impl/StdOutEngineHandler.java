@@ -1,8 +1,10 @@
 package com.yzxie.easy.log.engine.handler.impl;
 
 import com.yzxie.easy.log.common.conf.KafkaConfig;
+import com.yzxie.easy.log.common.data.log.LogType;
 import com.yzxie.easy.log.common.data.log.impl.StdOutLogMessage;
-import com.yzxie.easy.log.common.kafka.KafkaGroup;
+import com.yzxie.easy.log.common.kafka.KafkaTopic;
+import com.yzxie.easy.log.common.kafka.KafkaTopicPartition;
 import com.yzxie.easy.log.engine.bussine.SecondLevelFlow;
 import com.yzxie.easy.log.engine.bussine.TopTenApi;
 import com.yzxie.easy.log.engine.handler.AbstractEngineHandler;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.*;
 
 /**
@@ -33,18 +36,22 @@ public class StdOutEngineHandler extends AbstractEngineHandler<StdOutLogMessage>
 
     @Override
     public StdOutEngineHandler startUp() {
-        List<KafkaGroup> kafkaGroupList = KafkaConfig.listKafkaGroup();
-        messageReceivedExecutorService = Executors.newFixedThreadPool(kafkaGroupList.size());
-        messageLists = new HashMap<>();
-        for (KafkaGroup kafkaGroup : kafkaGroupList) {
-            String appId = kafkaGroup.getGroupId();
-            BlockingQueue<StdOutLogMessage> messageList = new LinkedBlockingQueue();
-            messageLists.put(appId, messageList);
-            messageReceivedExecutorService.execute(new MessageProcessor(messageList));
+        Optional<KafkaTopic> kafkaTopicOptional = KafkaConfig.getKafkaTopic(LogType.STDOUT);
+        if (kafkaTopicOptional.isPresent()) {
+            KafkaTopic kafkaTopic = kafkaTopicOptional.get();
+            messageReceivedExecutorService = Executors.newFixedThreadPool(kafkaTopic.getPartitions().size());
+            messageLists = new HashMap<>();
+            for (KafkaTopicPartition partition : kafkaTopic.getPartitions()) {
+                String appId = partition.getAppId();
+                BlockingQueue<StdOutLogMessage> messageList = new LinkedBlockingQueue();
+                messageLists.put(appId, messageList);
+                messageReceivedExecutorService.execute(new MessageProcessor(messageList));
+            }
+            this.businessExecutorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+            return this;
+        } else {
+            throw new UnsupportedOperationException(LogType.STDOUT.getName());
         }
-
-        this.businessExecutorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        return this;
     }
 
     /**
@@ -58,7 +65,6 @@ public class StdOutEngineHandler extends AbstractEngineHandler<StdOutLogMessage>
 
     @Override
     protected void process(StdOutLogMessage logMessage) {
-        log.info("process {}, {}", logMessage.getAppId(), Thread.currentThread().getId());
         /**
          * 实时日志分析
          */

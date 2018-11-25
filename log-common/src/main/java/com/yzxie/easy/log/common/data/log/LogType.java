@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
  * @description:
  */
 public enum LogType {
-    STDOUT("StdOut"), STDERROR("StdError"), GC("Gc"), REDIS_SLOW_LOG("RedisSlowLogMessage"),
+    STDOUT("STDOUT"), STDERROR("StdError"), GC("Gc"), REDIS_SLOW_LOG("RedisSlowLogMessage"),
     MYSQL_SLOW_LOG("MySQLSlowLogMessage");
 
     private final String name;

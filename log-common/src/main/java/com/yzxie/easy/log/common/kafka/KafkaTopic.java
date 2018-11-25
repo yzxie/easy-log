@@ -1,7 +1,8 @@
 package com.yzxie.easy.log.common.kafka;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author xieyizun
@@ -9,8 +10,7 @@ import lombok.Data;
  * @description:
  */
 @Data
-@AllArgsConstructor
 public class KafkaTopic {
     private String name;
-    private Integer partitions;
+    private List<KafkaTopicPartition> partitions;
 }

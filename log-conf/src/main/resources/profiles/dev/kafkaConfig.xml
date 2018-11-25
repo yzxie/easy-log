@@ -1,42 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <kafka>
-        <brokers>
-
-        </brokers>
-        <zookeeper>
-
-        </zookeeper>
-
-        <consumerGroup>
-            <id>app1</id>
-            <topic>
-                <name>StdOut</name>
-                <partitions>1</partitions>
-            </topic>
-            <topic>
-                <name>StdError</name>
-                <partitions>1</partitions>
-            </topic>
-            <topic>
-                <name>Gc</name>
-                <partitions>1</partitions>
-            </topic>
-            <topic>
-                <name>RedisSlowLog</name>
-                <partitions>1</partitions>
-            </topic>
-            <topic>
-                <name>MySQLSlowLog</name>
-                <partitions>1</partitions>
-            </topic>
-        </consumerGroup>
-        <consumerGroup>
-            <id>app2</id>
-            <topic>
-                <name>StdOut</name>
-                <partitions>1</partitions>
-            </topic>
-        </consumerGroup>
+        <brokers>127.0.0.1:19092,127.0.0.1:19093</brokers>
+        <zookeeper>127.0.0.1:2181</zookeeper>
+        <topic> <!-- 每种类型的日志对应一个主题 -->
+            <name>STDOUT</name>
+            <!-- 分区数，一个应用对应一个分区（当多机部署时，可以多个分区，每个机器的日志对应一个分区） -->
+            <partition>
+                <app>app1</app>
+                <index>0</index>
+            </partition>
+            <partition>
+                <app>app2</app>
+                <index>1</index>
+            </partition>
+            <replication>1</replication> <!-- 分区副本数量需少于broker数量，因为各个副本需要分布在不同broker -->
+        </topic>
+        <topic>
+            <name>StdError</name>
+            <partition>
+                <app>app1</app>
+                <index>0</index>
+            </partition>
+            <replication>1</replication>
+        </topic>
+        <topic>
+            <name>Gc</name>
+            <partition>
+                <app>app1</app>
+                <index>0</index>
+            </partition>
+            <replication>1</replication>
+        </topic>
+        <topic>
+            <name>RedisSlowLog</name>
+            <partition>
+                <app>app1</app>
+                <index>0</index>
+            </partition>
+            <replication>1</replication>
+        </topic>
+        <topic>
+            <name>MySQLSlowLog</name>
+            <partition>
+                <app>app1</app>
+                <index>0</index>
+            </partition>
+            <replication>1</replication>
+        </topic>
     </kafka>
 </config>

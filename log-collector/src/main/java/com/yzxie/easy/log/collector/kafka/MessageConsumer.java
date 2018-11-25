@@ -2,14 +2,13 @@ package com.yzxie.easy.log.collector.kafka;
 
 import com.google.common.collect.ImmutableMap;
 import com.yzxie.easy.log.common.kafka.KafkaTopic;
+import com.yzxie.easy.log.common.kafka.KafkaTopicPartition;
 import kafka.consumer.ConsumerIterator;
 import kafka.consumer.ConsumerTimeoutException;
 import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
 import kafka.message.MessageAndMetadata;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -32,12 +31,12 @@ public class MessageConsumer {
     private ConsumerConnector consumerConnector;
 
     public MessageConsumer(String groupId, KafkaTopic kafkaTopic, ConsumerConnector consumerConnector) {
-        if (kafkaTopic.getPartitions() < 0) {
+        if (kafkaTopic.getPartitions().size() < 0) {
             throw new RuntimeException("construct message consumer failure");
         }
         this.groupId = groupId;
         this.kafkaTopic = kafkaTopic;
-        this.partitionsIterators = new ArrayList<>(kafkaTopic.getPartitions());
+        this.partitionsIterators = new ArrayList<>(kafkaTopic.getPartitions().size());
         this.consumerConnector = consumerConnector;
         init();
     }
@@ -46,12 +45,12 @@ public class MessageConsumer {
         log.info("MessageConsumer for {} init starting.", kafkaTopic.getName());
 
         // each partition attach to a kafka stream
-        Map<String, Integer> topicStreamCountMap = ImmutableMap.of(kafkaTopic.getName(), kafkaTopic.getPartitions());
+        Map<String, Integer> topicStreamCountMap = ImmutableMap.of(kafkaTopic.getName(), kafkaTopic.getPartitions().size());
         Map<String, List<KafkaStream<byte[], byte[]>>> consumerStreamMap =
                 consumerConnector.createMessageStreams(topicStreamCountMap);
-        for (int partitionIndex = 0; partitionIndex < kafkaTopic.getPartitions(); partitionIndex++) {
+        for (KafkaTopicPartition partition : kafkaTopic.getPartitions()) {
             KafkaStream<byte[], byte[]> partitionStream =
-                    consumerStreamMap.get(kafkaTopic.getName()).get(partitionIndex);
+                    consumerStreamMap.get(kafkaTopic.getName()).get(partition.getIndex());
             partitionsIterators.add(partitionStream.iterator());
         }
 
@@ -91,7 +90,7 @@ public class MessageConsumer {
         return false;
     }
 
-    public KafkaMessage next(int partitionIndex) {
+    public Message next(int partitionIndex) {
         if (partitionIndex > partitionsIterators.size() || partitionIndex < 0) {
             return null;
         }
@@ -108,7 +107,7 @@ public class MessageConsumer {
                     key = new String(messageAndMetadata.key(), Charset.forName("UTF-8"));
                 }
                 String messageContent = new String(message, Charset.forName("UTF-8"));
-                return new KafkaMessage(topicName, key, messageContent);
+                return new Message(topicName, key, messageContent);
             }
 
         } catch (ConsumerTimeoutException e) {

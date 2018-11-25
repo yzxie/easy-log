@@ -30,6 +30,6 @@ public class LogStorageService extends AbstractService {
     }
 
     public static void dispatch(ILogMessage logMessage) {
-        //log.info("store log message: {} {}", logMessage.getLogType(), logMessage.getContent());
+        log.info("store log message: {} {}", logMessage.getLogType(), logMessage.getContent());
     }
 }

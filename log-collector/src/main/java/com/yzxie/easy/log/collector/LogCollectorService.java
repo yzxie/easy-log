@@ -1,18 +1,13 @@
 package com.yzxie.easy.log.collector;
 
-import com.yzxie.easy.log.collector.kafka.KafkaConsumerGroup;
+import com.yzxie.easy.log.collector.handler.LogMessageHandler;
 import com.yzxie.easy.log.common.conf.KafkaConfig;
-import com.yzxie.easy.log.common.kafka.KafkaGroup;
+import com.yzxie.easy.log.common.kafka.KafkaTopic;
 import com.yzxie.easy.log.common.service.AbstractService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.util.Pair;
-import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
 
 /**
  * @author xieyizun
@@ -21,16 +16,16 @@ import java.util.concurrent.ExecutorService;
  */
 @Slf4j
 public final class LogCollectorService extends AbstractService {
-    private List<KafkaConsumerGroup> kafkaConsumerGroups;
+    private List<LogMessageHandler> logMessageHandlers;
 
     @Override
     public void start() {
-        // 组列表，对应应用列表
-        List<KafkaGroup> kafkaGroups = KafkaConfig.listKafkaGroup();
-        this.kafkaConsumerGroups = new ArrayList<>(kafkaGroups.size());
-        for (KafkaGroup kafkaGroup : kafkaGroups) {
-            KafkaConsumerGroup kafkaConsumerGroup = new KafkaConsumerGroup(kafkaGroup);
-            kafkaConsumerGroups.add(kafkaConsumerGroup);
+        List<KafkaTopic> kafkaTopics = KafkaConfig.listKafkaTopics();
+        logMessageHandlers = new ArrayList<>(kafkaTopics.size());
+        for (KafkaTopic kafkaTopic : kafkaTopics) {
+            log.info("{}, {}", kafkaTopic.getName(), kafkaTopic.getPartitions());
+            LogMessageHandler logMessageHandler = new LogMessageHandler(kafkaTopic);
+            logMessageHandlers.add(logMessageHandler);
         }
         startNext();
     }

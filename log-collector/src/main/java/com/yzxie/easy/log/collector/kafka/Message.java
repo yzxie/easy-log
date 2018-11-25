@@ -9,13 +9,13 @@ import java.util.Optional;
  * @date 26/10/2018 17:36
  * @description:
  */
-public class KafkaMessage {
+public class Message {
     private String topic;
     // partition key. optional
     private Optional<String> key;
     private String content;
 
-    public KafkaMessage(String topic, String key, String content) {
+    public Message(String topic, String key, String content) {
         this.topic = topic;
         if (key != null) {
             this.key = Optional.of(key);
