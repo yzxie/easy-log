@@ -1,5 +1,6 @@
 package com.yzxie.easy.log.engine.push;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.yzxie.easy.log.common.conf.KafkaConfig;
 import com.yzxie.easy.log.common.data.bussine.ApiAccessStat;
@@ -50,33 +51,41 @@ public class WebPushService {
     private class PushTopTenApiTask implements Runnable {
         @Override
         public void run() {
-            JSONObject pushData = new JSONObject();
-
+            JSONArray pushData = new JSONArray();
             for (KafkaTopicPartition partition : stdOutTopic.getPartitions()) {
                 String appId = partition.getAppId();
                 List<ApiAccessStat> topTenApis = TopTenApi.getTopTenAPis(appId);
-                pushData.put(appId, topTenApis);
+                JSONObject data = new JSONObject();
+                data.put("logType", stdOutTopic.getName());
+                data.put("app", appId);
+                data.put("data", topTenApis);
+                pushData.add(data);
             }
-
-            nettyClient.sendMessage(pushData);
+            JSONObject res = new JSONObject();
+            res.put("data", pushData);
+            nettyClient.sendMessage(res);
         }
     }
 
     private class PushSecondLevelFlowTask implements Runnable {
         @Override
         public void run() {
-            JSONObject pushData = new JSONObject();
-
+            JSONArray pushData = new JSONArray();
             for (KafkaTopicPartition partition : stdOutTopic.getPartitions()) {
                 String appId = partition.getAppId();
                 List<SecondRequestStat> secondRequestStats = SecondLevelFlow.getSecondRequestStat(appId);
                 if (secondRequestStats != null) {
                     Collections.reverse(secondRequestStats);
                 }
-                pushData.put(appId, secondRequestStats);
+                JSONObject data = new JSONObject();
+                data.put("logType", stdOutTopic.getName());
+                data.put("app", appId);
+                data.put("data", secondRequestStats);
+                pushData.add(data);
             }
-
-            nettyClient.sendMessage(pushData);
+            JSONObject res = new JSONObject();
+            res.put("data",pushData);
+            nettyClient.sendMessage(res);
         }
     }
 }

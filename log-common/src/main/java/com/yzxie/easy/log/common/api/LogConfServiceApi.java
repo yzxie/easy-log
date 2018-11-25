@@ -1,5 +1,7 @@
 package com.yzxie.easy.log.common.api;
 
+import com.yzxie.easy.log.common.data.rpc.LogTypeWithApps;
+
 import java.util.List;
 
 /**
@@ -8,5 +10,5 @@ import java.util.List;
  * @description:
  */
 public interface LogConfServiceApi {
-    List<String> listAppId();
+    List<LogTypeWithApps> listLogTypeAndApps();
 }
