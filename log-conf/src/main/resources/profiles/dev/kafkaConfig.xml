@@ -17,7 +17,7 @@
             <replication>1</replication> <!-- 分区副本数量需少于broker数量，因为各个副本需要分布在不同broker -->
         </topic>
         <topic>
-            <name>StdError</name>
+            <name>STDERROR</name>
             <partition>
                 <app>app1</app>
                 <index>0</index>
@@ -25,7 +25,7 @@
             <replication>1</replication>
         </topic>
         <topic>
-            <name>Gc</name>
+            <name>GC</name>
             <partition>
                 <app>app1</app>
                 <index>0</index>
@@ -33,7 +33,7 @@
             <replication>1</replication>
         </topic>
         <topic>
-            <name>RedisSlowLog</name>
+            <name>REDIS_SLOW_LOG</name>
             <partition>
                 <app>app1</app>
                 <index>0</index>
@@ -41,7 +41,7 @@
             <replication>1</replication>
         </topic>
         <topic>
-            <name>MySQLSlowLog</name>
+            <name>MYSQL_SLOW_LOG</name>
             <partition>
                 <app>app1</app>
                 <index>0</index>
