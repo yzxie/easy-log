@@ -1,4 +1,4 @@
-package com.yzxie.easy.log.engine.handler.impl;
+package com.yzxie.easy.log.engine.processor.impl;
 
 import com.yzxie.easy.log.common.conf.KafkaConfig;
 import com.yzxie.easy.log.common.data.log.LogType;
@@ -7,12 +7,11 @@ import com.yzxie.easy.log.common.kafka.KafkaTopic;
 import com.yzxie.easy.log.common.kafka.KafkaTopicPartition;
 import com.yzxie.easy.log.engine.bussine.SecondLevelFlow;
 import com.yzxie.easy.log.engine.bussine.TopTenApi;
-import com.yzxie.easy.log.engine.handler.AbstractEngineHandler;
+import com.yzxie.easy.log.engine.processor.AbstractEngineProcessor;
 import com.yzxie.easy.log.storage.LogStorageService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.*;
@@ -23,7 +22,7 @@ import java.util.concurrent.*;
  * @description:
  */
 @Slf4j
-public class StdOutEngineHandler extends AbstractEngineHandler<StdOutLogMessage> {
+public class StdOutEngineProcessor extends AbstractEngineProcessor<StdOutLogMessage> {
     /**
      * 业务线程池
      */
@@ -35,7 +34,7 @@ public class StdOutEngineHandler extends AbstractEngineHandler<StdOutLogMessage>
     private Map<String, BlockingQueue<StdOutLogMessage>> messageLists; // appId -> blockingQueue
 
     @Override
-    public StdOutEngineHandler startUp() {
+    public StdOutEngineProcessor startUp() {
         Optional<KafkaTopic> kafkaTopicOptional = KafkaConfig.getKafkaTopic(LogType.STDOUT);
         if (kafkaTopicOptional.isPresent()) {
             KafkaTopic kafkaTopic = kafkaTopicOptional.get();

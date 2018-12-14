@@ -23,7 +23,6 @@ public final class LogCollectorService extends AbstractService {
         List<KafkaTopic> kafkaTopics = KafkaConfig.listKafkaTopics();
         logMessageHandlers = new ArrayList<>(kafkaTopics.size());
         for (KafkaTopic kafkaTopic : kafkaTopics) {
-            log.info("{}, {}", kafkaTopic.getName(), kafkaTopic.getPartitions());
             LogMessageHandler logMessageHandler = new LogMessageHandler(kafkaTopic);
             logMessageHandlers.add(logMessageHandler);
         }

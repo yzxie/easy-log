@@ -2,7 +2,7 @@ package com.yzxie.easy.log.engine.bussine;
 
 import com.yzxie.easy.log.common.data.bussine.ApiAccessStat;
 import com.yzxie.easy.log.common.data.log.impl.StdOutLogMessage;
-import com.yzxie.easy.log.storage.handler.RedisHandler;
+import com.yzxie.easy.log.storage.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.BoundZSetOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,13 +28,13 @@ public class TopTenApi implements Runnable {
     public void run() {
         String appId = stdOutLogMessage.getAppId();
         String apiPath = stdOutLogMessage.getApiPath();
-        RedisHandler.increaseScore(TOP_TEN_API_PREFIX+appId, apiPath);
+        RedisUtils.increaseScore(TOP_TEN_API_PREFIX+appId, apiPath);
     }
 
     public static List<ApiAccessStat> getTopTenAPis(String appId) {
         List<ApiAccessStat> apiAccessStats = new ArrayList<>(10);
 
-        RedisTemplate redisTemplate = RedisHandler.getRedisTemplate();
+        RedisTemplate redisTemplate = RedisUtils.getRedisTemplate();
         BoundZSetOperations operations = redisTemplate.boundZSetOps(TOP_TEN_API_PREFIX+appId);
         Set<ZSetOperations.TypedTuple<String>> valuesWithScore = operations.rangeWithScores(0, 10);
 

@@ -3,8 +3,8 @@ package com.yzxie.easy.log.engine;
 import com.yzxie.easy.log.common.data.log.ILogMessage;
 import com.yzxie.easy.log.common.data.log.LogType;
 import com.yzxie.easy.log.common.service.AbstractService;
-import com.yzxie.easy.log.engine.handler.EngineHandlerFactory;
-import com.yzxie.easy.log.engine.handler.IEngineHandler;
+import com.yzxie.easy.log.engine.processor.EngineProcessorFactory;
+import com.yzxie.easy.log.engine.processor.IEngineProcessor;
 import com.yzxie.easy.log.engine.push.WebPushService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,15 +18,13 @@ import java.util.Map;
  */
 @Slf4j
 public class LogEngineService extends AbstractService {
-    private static Map<LogType, IEngineHandler> logEngineHandlers = new HashMap<>(LogType.size());
-    private WebPushService webPushService;
+    private static Map<LogType, IEngineProcessor> logEngineProcessors = new HashMap<>(LogType.size());
 
     @Override
     public void start() {
         for (LogType logTypeSupport : LogType.values()) {
-            logEngineHandlers.put(logTypeSupport, EngineHandlerFactory.getEngineHandler(logTypeSupport).startUp());
+            logEngineProcessors.put(logTypeSupport, EngineProcessorFactory.getEngineHandler(logTypeSupport).startUp());
         }
-        this.webPushService = new WebPushService();
         log.info("LogEngineService started successfully");
 
         startNext();
@@ -38,8 +36,8 @@ public class LogEngineService extends AbstractService {
     }
 
     public static void dispatch(ILogMessage logMessage) {
-        if (logEngineHandlers.get(logMessage.getLogType()) != null) {
-            logEngineHandlers.get(logMessage.getLogType()).handle(logMessage);
+        if (logEngineProcessors.get(logMessage.getLogType()) != null) {
+            logEngineProcessors.get(logMessage.getLogType()).handle(logMessage);
         } else {
             log.error("logType: {} is not supported.", logMessage.getLogType());
         }

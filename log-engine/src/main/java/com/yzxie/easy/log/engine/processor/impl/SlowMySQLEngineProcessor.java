@@ -1,7 +1,7 @@
-package com.yzxie.easy.log.engine.handler.impl;
+package com.yzxie.easy.log.engine.processor.impl;
 
 import com.yzxie.easy.log.common.data.log.impl.MySQLSlowLogMessage;
-import com.yzxie.easy.log.engine.handler.AbstractEngineHandler;
+import com.yzxie.easy.log.engine.processor.AbstractEngineProcessor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
  * @description:
  */
 @Slf4j
-public class SlowMySQLEngineHandler extends AbstractEngineHandler<MySQLSlowLogMessage> {
+public class SlowMySQLEngineProcessor extends AbstractEngineProcessor<MySQLSlowLogMessage> {
     @Override
     protected void process(MySQLSlowLogMessage content) {
         log.info("process log {}", content);

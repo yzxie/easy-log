@@ -12,6 +12,7 @@ import com.yzxie.easy.log.engine.bussine.SecondLevelFlow;
 import com.yzxie.easy.log.engine.bussine.TopTenApi;
 import com.yzxie.easy.log.engine.push.netty.NettyClient;
 import com.yzxie.easy.log.engine.push.netty.NettyConstants;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit;
  * @date 17/11/2018 23:26
  * @description: 定期推送各种日志分析结果给web展示
  */
+@Service
 public class WebPushService {
     // 每个处理器使用一个nettyClient发送消息给easy web
     private NettyClient nettyClient = new NettyClient(NettyConstants.SERVER_HOST, NettyConstants.SERVER_PORT);

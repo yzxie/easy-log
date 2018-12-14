@@ -2,10 +2,8 @@ package com.yzxie.easy.log.storage;
 
 import com.yzxie.easy.log.common.data.log.ILogMessage;
 import com.yzxie.easy.log.common.service.AbstractService;
-import com.yzxie.easy.log.storage.handler.RedisHandler;
+import com.yzxie.easy.log.storage.processor.impl.HBaseProcessor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author xieyizun
@@ -30,6 +28,7 @@ public class LogStorageService extends AbstractService {
     }
 
     public static void dispatch(ILogMessage logMessage) {
+        HBaseProcessor.getInstance().save(logMessage);
         log.info("store log message: {} {}", logMessage.getLogType(), logMessage.getContent());
     }
 }

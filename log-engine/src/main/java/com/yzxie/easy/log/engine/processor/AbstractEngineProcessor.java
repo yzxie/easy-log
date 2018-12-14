@@ -1,8 +1,6 @@
-package com.yzxie.easy.log.engine.handler;
+package com.yzxie.easy.log.engine.processor;
 
 import com.yzxie.easy.log.common.data.log.ILogMessage;
-import com.yzxie.easy.log.engine.push.netty.NettyClient;
-import com.yzxie.easy.log.engine.push.netty.NettyConstants;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.*;
@@ -13,7 +11,7 @@ import java.util.concurrent.*;
  * @description:
  */
 @Slf4j
-public abstract class AbstractEngineHandler<T extends ILogMessage> implements IEngineHandler<T> {
+public abstract class AbstractEngineProcessor<T extends ILogMessage> implements IEngineProcessor<T> {
     private BlockingQueue<T> messageList;
     private MessageProcessor messageProcessor;
 
@@ -21,7 +19,7 @@ public abstract class AbstractEngineHandler<T extends ILogMessage> implements IE
      * 初始化
      * @return
      */
-    public IEngineHandler startUp() {
+    public IEngineProcessor startUp() {
         messageList = new LinkedBlockingQueue<>();
         messageProcessor = new MessageProcessor(messageList);
         ExecutorService messageProcessPool = Executors.newSingleThreadExecutor();

@@ -3,7 +3,7 @@ package com.yzxie.easy.log.engine.bussine;
 import com.yzxie.easy.log.common.data.bussine.SecondRequestStat;
 import com.yzxie.easy.log.common.data.log.impl.StdOutLogMessage;
 import com.yzxie.easy.log.common.utils.TimeUtils;
-import com.yzxie.easy.log.storage.handler.RedisHandler;
+import com.yzxie.easy.log.storage.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -22,7 +22,7 @@ import java.util.Set;
 public class SecondLevelFlow implements Runnable {
     private static final String SECOND_REQUEST_PREFIX = "second_request:"; // 根据访问量作为score排序
     private static final String SECOND_TIMESTAMP_PREFIX = "second_timestamp:"; // 根据时间戳作为score排序
-    private static final RedisTemplate redisTemplate = RedisHandler.getRedisTemplate();
+    private static final RedisTemplate redisTemplate = RedisUtils.getRedisTemplate();
     private static final int STAT_SECONDS = 120;
 
     private StdOutLogMessage stdOutLogMessage;

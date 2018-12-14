@@ -1,4 +1,4 @@
-package com.yzxie.easy.log.storage.handler;
+package com.yzxie.easy.log.storage.util;
 
 import com.yzxie.easy.log.common.conf.StorageConfig;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -14,7 +14,7 @@ import java.util.*;
  * @date 31/10/2018 23:13
  * @description:
  */
-public class RedisHandler {
+public class RedisUtils {
     private static RedisTemplate<String, Object> redisTemplate;
     private static JedisConnectionFactory jedisConnectionFactory;
 

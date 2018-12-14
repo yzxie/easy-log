@@ -1,4 +1,4 @@
-package com.yzxie.easy.log.storage.handler;
+package com.yzxie.easy.log.storage.util;
 
 import org.junit.Test;
 import org.springframework.data.redis.core.BoundZSetOperations;
@@ -12,7 +12,7 @@ import java.util.concurrent.CountDownLatch;
  * @description:
  */
 public class RedisHandlerTest {
-    private RedisTemplate redisTemplate = RedisHandler.getRedisTemplate();
+    private RedisTemplate redisTemplate = RedisUtils.getRedisTemplate();
 
     @Test
     public void testRedisTemplateThreadSafe() {
@@ -47,7 +47,7 @@ public class RedisHandlerTest {
             try {
                 begin.await();
                 System.out.println(System.currentTimeMillis());
-                //RedisHandler.increaseScore("test_thread_safe", "sum", 1);
+                //RedisUtils.increaseScore("test_thread_safe", "sum", 1);
                 redisTemplate.opsForZSet().incrementScore("test_thread_safe", "sum", 1);
             } catch (Exception e) {
                 e.printStackTrace();

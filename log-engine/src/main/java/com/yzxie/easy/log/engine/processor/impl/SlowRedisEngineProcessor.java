@@ -1,7 +1,7 @@
-package com.yzxie.easy.log.engine.handler.impl;
+package com.yzxie.easy.log.engine.processor.impl;
 
 import com.yzxie.easy.log.common.data.log.impl.RedisSlowLogMessage;
-import com.yzxie.easy.log.engine.handler.AbstractEngineHandler;
+import com.yzxie.easy.log.engine.processor.AbstractEngineProcessor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
  * @description:
  */
 @Slf4j
-public class SlowRedisEngineHandler extends AbstractEngineHandler<RedisSlowLogMessage> {
+public class SlowRedisEngineProcessor extends AbstractEngineProcessor<RedisSlowLogMessage> {
     @Override
     protected void process(RedisSlowLogMessage logMessage) {
         log.info("process log {}", logMessage);
