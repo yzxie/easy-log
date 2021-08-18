@@ -33,6 +33,4 @@ partition index: 1
 ### 指定defaultPartitionId
 1. app1 -> 0
 2. app2 -> 1
-3. ...
-
 
